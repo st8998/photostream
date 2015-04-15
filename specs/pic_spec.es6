@@ -6,9 +6,11 @@ let Pic = require('../js/pic')
 describe('Pic', function() {
   describe('encode/decode', function() {
     let hash
+    let trans
 
     beforeEach(function() {
-      hash = new Pic({fileName: 'some_shitty.jpg'}).encode({resize: [100,100]})
+      trans = {resize: [100,100], sharpen: true}
+      hash = new Pic({fileName: 'some_shitty.jpg', trans: trans}).encode()
     })
 
     it('encode to url string', function() {
@@ -17,7 +19,7 @@ describe('Pic', function() {
     })
 
     it('decodes encoded string', function() {
-      assert.deepEqual(Pic.decode(hash).trans.resize, [100,100])
+      assert.deepEqual(Pic.decode(hash).trans, trans)
     })
   })
 })
