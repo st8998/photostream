@@ -6,7 +6,7 @@ let fs = require('fs')
 
 let Pic = require('./pic')
 
-let picFolder = './images/'
+let picFolder = './pics/'
 let router = express.Router()
 
 router.get('/:hash', function(req, res) {
