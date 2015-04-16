@@ -3,9 +3,15 @@
   "version": "0.0.1",
   "description": "Simple photo streaming resource",
   "author": "Ivan Efremov",
+  "vendor": [
+    "js-base64",
+    "lodash"
+  ],
   "dependencies": {
-    "js-base64": "^2.1.7",
-    "lodash": "^3.1.0"
+    "express": "^4.12.3",
+    "js-base64": "^2.1.8",
+    "lodash": "^3.6.0",
+    "sharp": "^0.9.3"
   },
   "devDependencies": {
     "babel": "^4.4.3",
@@ -15,7 +21,6 @@
     "chai": "^2.1.2",
     "chalk": "^0.5.1",
     "del": "^1.1.1",
-    "express": "^4.12.3",
     "gulp": "^3.8.5",
     "gulp-buffer": "0.0.2",
     "gulp-less": "^3.0.2",
@@ -27,6 +32,7 @@
     "gulp-util": "^3.0.3",
     "gulp-watch": "^4.1.0",
     "mocha": "^2.2.1",
+    "supertest": "^0.15.0",
     "through2": "^0.6.3",
     "vinyl-source-stream": "^1.0.0",
     "yargs": "^2.3.0"

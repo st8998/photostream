@@ -9,7 +9,7 @@ var rev = require('gulp-rev')
 var bundler = browserify()
 
 // remove vendor libs from app bundle
-Object.keys(require('../package.json').dependencies).forEach(function(dep) { bundler.require(dep) })
+require('../package.json').vendor.forEach(function(dep) { bundler.require(dep) })
 
 module.exports = function() {
   return bundler.bundle()

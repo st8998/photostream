@@ -1,18 +1,20 @@
 let Base64 = require('js-base64').Base64
-let _ = require('lodash')
+
+let {partial, flow, invert, transform, merge, omit} = require('lodash')
 
 let encodeTable = {
-  'resize': 'r'
+  'resize': 'r',
+  'fileName': 'f'
 }
-let decodeTable = _.invert(encodeTable)
+let decodeTable = invert(encodeTable)
 
-let transform = (codeTable, attrs)=> _.transform(attrs, (out, value, key)=> out[codeTable[key] || key] = value)
+let tableTransform = (codeTable, attrs)=> transform(attrs, (out, value, key)=> out[codeTable[key] || key] = value)
 
-let encodeAttrs = _.partial(transform, encodeTable)
-let decodeAttrs = _.partial(transform, decodeTable)
+let encodeAttrs = partial(tableTransform, encodeTable)
+let decodeAttrs = partial(tableTransform, decodeTable)
 
-let encodeFlow = _.flow(encodeAttrs, JSON.stringify, Base64.encodeURI)
-let decodeFlow = _.flow(Base64.decode, JSON.parse, decodeAttrs)
+let encodeFlow = flow(encodeAttrs, JSON.stringify, Base64.encodeURI)
+let decodeFlow = flow(Base64.decode, JSON.parse, decodeAttrs)
 
 class Pic {
   constructor({fileName = '', trans = {}}) {
@@ -21,11 +23,12 @@ class Pic {
   }
 
   encode() {
-    return encodeFlow(this.trans)
+    return encodeFlow(merge({fileName: this.fileName}, this.trans))
   }
 
   static decode(hash) {
-    return new Pic({trans: decodeFlow(hash)})
+    let decoded = decodeFlow(hash)
+    return new Pic({fileName: decoded.fileName, trans: omit(decoded, 'fileName')})
   }
 }
 

@@ -14,7 +14,7 @@ var bundler = browserify('./js/app.es6', {debug: args['debug']})
 bundler.transform(babelify).transform('brfs')
 
 // remove vendor libs from app bundle
-Object.keys(require('../package.json').dependencies).forEach(function(dep) { bundler.external(dep) })
+require('../package.json').vendor.forEach(function(dep) { bundler.external(dep) })
 
 module.exports = function() {
   return bundler.bundle()

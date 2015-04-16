@@ -9,8 +9,8 @@ describe('Pic', function() {
     let trans
 
     beforeEach(function() {
-      trans = {resize: [100,100], sharpen: true}
-      hash = new Pic({fileName: 'some_shitty.jpg', trans: trans}).encode()
+      trans = {resize: [100,100], sharpen: ''}
+      hash = new Pic({fileName: 'test.jpg', trans: trans}).encode()
     })
 
     it('encode to url string', function() {
@@ -19,7 +19,9 @@ describe('Pic', function() {
     })
 
     it('decodes encoded string', function() {
-      assert.deepEqual(Pic.decode(hash).trans, trans)
+      assert.deepEqual(Pic.decode(hash).trans, trans, 'trans decoding')
+      assert.equal(Pic.decode(hash).fileName, 'test.jpg', 'filename decoding')
     })
+
   })
 })
