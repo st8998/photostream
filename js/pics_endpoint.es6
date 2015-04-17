@@ -8,6 +8,18 @@ let {each} = require('lodash')
 
 let Pic = require('./pic')
 
+let joinArray = function() {
+  let arr = []
+
+  return es.through(
+    arr.push.bind(arr),
+    function () {
+      this.emit('data', arr)
+      this.emit('end')
+    }
+  )
+}
+
 
 router.get('/', function(req, res) {
   if (!req.accepts('application/json')) return res.status(406).end()
@@ -23,12 +35,12 @@ router.get('/', function(req, res) {
           pic.width = metadata.width
           pic.height = metadata.height
 
-          cb(null, JSON.stringify(pic.asJson()))
+          cb(null, pic.asJson())
         })
 
       }))
-      .pipe(es.join(','))
-      .pipe(es.map((data, cb)=> cb(null, `[${data}]`)))
+      .pipe(joinArray())
+      .pipe(es.stringify())
       .pipe(res)
   })
 })
