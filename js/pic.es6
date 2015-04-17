@@ -17,17 +17,20 @@ let encodeFlow = flow(encodeAttrs, JSON.stringify, Base64.encodeURI)
 let decodeFlow = flow(Base64.decode, JSON.parse, decodeAttrs)
 
 class Pic {
-  constructor({fileName = '', trans = {}} = {}) {
-    this.fileName = fileName
-    this.trans = trans
+  constructor(attrs = {}) {
+    merge(this, attrs)
   }
 
-  encode() {
-    return encodeFlow(merge({fileName: this.fileName}, this.trans))
+  encode(trans) {
+    return encodeFlow(merge({fileName: this.fileName}, trans))
   }
 
   path() {
     return Pic.rootDir + this.fileName
+  }
+
+  static encode(attrs) {
+    return encodeFlow(attrs)
   }
 
   static decode(hash) {
@@ -40,7 +43,7 @@ class Pic {
   }
 
   static fromJson(attrs) {
-    return merge(new Pic(), attrs)
+    return new Pic(attrs)
   }
 }
 

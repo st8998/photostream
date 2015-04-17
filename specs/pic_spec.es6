@@ -17,7 +17,7 @@ describe('Pic', function() {
 
     beforeEach(function() {
       trans = {resize: [100,100], sharpen: ''}
-      hash = new Pic({fileName: 'test.jpg', trans: trans}).encode()
+      hash = new Pic({fileName: 'test.jpg'}).encode(trans)
     })
 
     it('encode to url string', function() {

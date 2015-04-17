@@ -25,16 +25,16 @@ describe('Images Pipeline', function() {
 
   beforeEach(function() {
     trans = {resize: [100, 100], sharpen: []}
-    pic = new Pic({fileName: 'test.jpg', trans: trans})
+    pic = new Pic({fileName: 'test.jpg'})
   })
 
   it('returns 200 for proper hash requests', function(end) {
-    request(app).get('/-/pics/' + pic.encode()).expect(200).end(end)
+    request(app).get('/-/pics/' + pic.encode(trans)).expect(200).end(end)
   })
 
   it('returns transformed image for proper hash requests', function(end) {
     request(app)
-      .get('/-/pics/' + pic.encode())
+      .get('/-/pics/' + pic.encode(trans))
       .expect(200)
       .parse(binaryParser)
       .end((err, res)=> {
@@ -49,7 +49,7 @@ describe('Images Pipeline', function() {
 
   it('returns 404 for missed images', function(end) {
     pic.fileName = 'no_such_file.jpg'
-    request(app).get('/-/pics/' + pic.encode()).expect(404).end(end)
+    request(app).get('/-/pics/' + pic.encode(trans)).expect(404).end(end)
   })
 
   it('returns 400 for corrupted or missed hash', function(end) {
