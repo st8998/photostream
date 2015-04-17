@@ -4,6 +4,13 @@ let assert = require('chai').assert
 let Pic = require('../js/pic')
 
 describe('Pic', function() {
+  it('creates instances from json', function() {
+    let pic = Pic.fromJson({fileName: 'test.jpg', height: 100, width: 100})
+    assert.equal(pic.fileName, 'test.jpg')
+    assert.equal(pic.width, 100)
+    assert.equal(pic.height, 100)
+  })
+
   describe('encode/decode', function() {
     let hash
     let trans
@@ -22,6 +29,5 @@ describe('Pic', function() {
       assert.deepEqual(Pic.decode(hash).trans, trans, 'trans decoding')
       assert.equal(Pic.decode(hash).fileName, 'test.jpg', 'filename decoding')
     })
-
   })
 })

@@ -16,7 +16,7 @@ router.get('/:hash', function(req, res) {
     reduce(
       pic.trans,
       (pipeline, attrs, method)=> pipeline[method].apply(pipeline, attrs),
-      sharp(picFolder + pic.fileName))
+      sharp(pic.path()))
       .on('error', (err)=> res.status(404).end())
       .pipe(res)
 
