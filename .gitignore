@@ -2,5 +2,7 @@ node_modules
 dest
 .idea
 
-pics/*
+pics/*.jpg
+pics/test/*.jpg
 !pics/test.jpg
+!pics/test/test.jpg

@@ -3,6 +3,7 @@ let stream = require('stream')
 let es = require('event-stream')
 let router = require('express').Router()
 let sharp = require('sharp')
+let readdir = require('recursive-readdir')
 
 let {each} = require('lodash')
 
@@ -26,10 +27,10 @@ router.get('/', function(req, res) {
 
   res.type('json')
 
-  fs.readdir(Pic.rootDir, function(err, files) {
+  readdir(Pic.rootDir, function(err, files) {
     es.readArray(files)
-      .pipe(es.map((data, cb)=> {
-        let pic = new Pic({fileName: data})
+      .pipe(es.map((fileName, cb)=> {
+        let pic = new Pic({fileName: fileName.substring(Pic.rootDir.length, 1000)})
 
         sharp(pic.path()).metadata((err, metadata)=> {
           pic.width = metadata.width

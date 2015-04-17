@@ -47,6 +47,6 @@ class Pic {
   }
 }
 
-Pic.rootDir = './pics/'
+Pic.rootDir = 'pics/'
 
 module.exports = Pic
