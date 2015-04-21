@@ -7,6 +7,6 @@ module.exports = function() {
   return gulp.src('./css/app.less')
     .pipe(less())
     .pipe(rev())
-    .pipe(gulp.dest('./dest/css'))
+    .pipe(gulp.dest('./dest/public/css'))
     .pipe(rev.manifest('dest/.rev-manifest', {base: process.cwd() + '/dest', merge: true})).pipe(gulp.dest('./dest/'))
 }

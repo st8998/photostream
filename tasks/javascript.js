@@ -27,6 +27,6 @@ module.exports = function() {
     })
     .pipe(source('bundle.js'))
     .pipe(buffer()).pipe(rev())
-    .pipe(gulp.dest('./dest/js/'))
+    .pipe(gulp.dest('./dest/public/js/'))
     .pipe(rev.manifest('dest/.rev-manifest', {base: process.cwd() + '/dest', merge: true})).pipe(gulp.dest('./dest/'))
 }

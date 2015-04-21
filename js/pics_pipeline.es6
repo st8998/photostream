@@ -3,6 +3,7 @@ let express = require('express')
 let sharp = require('sharp')
 
 let fs = require('fs')
+let ms = require('ms')
 
 let Pic = require('./pic')
 
@@ -12,6 +13,8 @@ let router = express.Router()
 router.get('/:hash', function(req, res) {
   try {
     let pic = Pic.decode(req.params.hash)
+
+    res.append('Cache-Control', `public, max-age=${ms('1 year')}`)
 
     reduce(
       pic.trans,
