@@ -5,6 +5,7 @@ var browserify = require('browserify')
 var source = require('vinyl-source-stream')
 var buffer = require('gulp-buffer')
 var rev = require('gulp-rev')
+var del = require('del')
 
 var bundler = browserify()
 
@@ -12,6 +13,8 @@ var bundler = browserify()
 require('../package.json').vendor.forEach(function(dep) { bundler.require(dep) })
 
 module.exports = function() {
+  del('./dest/js/vendor*')
+
   return bundler.bundle()
     .pipe(source('vendor.js'))
     .pipe(buffer()).pipe(rev())

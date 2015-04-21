@@ -8,6 +8,7 @@ var babelify = require('babelify')
 var source = require('vinyl-source-stream')
 var buffer = require('gulp-buffer')
 var rev = require('gulp-rev')
+var del = require('del')
 
 var bundler = browserify('./js/app.es6', {debug: args['debug']})
 
@@ -17,7 +18,13 @@ bundler.transform(babelify).transform('brfs')
 require('../package.json').vendor.forEach(function(dep) { bundler.external(dep) })
 
 module.exports = function() {
+  del('./dest/js/bundle*')
+
   return bundler.bundle()
+    .on('error', function(err) {
+      console.log(err.message)
+      this.emit('end')
+    })
     .pipe(source('bundle.js'))
     .pipe(buffer()).pipe(rev())
     .pipe(gulp.dest('./dest/js/'))
