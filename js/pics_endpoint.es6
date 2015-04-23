@@ -5,8 +5,6 @@ let router = require('express').Router()
 let sharp = require('sharp')
 let readdir = require('recursive-readdir')
 
-let {each} = require('lodash')
-
 let Pic = require('./pic')
 
 let joinArray = function() {
@@ -30,15 +28,18 @@ router.get('/', function(req, res) {
   readdir(Pic.rootDir, function(err, files) {
     es.readArray(files)
       .pipe(es.map((fileName, cb)=> {
-        let pic = new Pic({fileName: fileName.substring(Pic.rootDir.length, 1000)})
+        if (fileName.match(/(jpg|png|gif)$/)) {
+          let pic = new Pic({fileName: fileName.substring(Pic.rootDir.length, 1000)})
 
-        sharp(pic.path()).metadata((err, metadata)=> {
-          pic.width = metadata.width
-          pic.height = metadata.height
+          sharp(pic.path()).metadata((err, metadata)=> {
+            pic.width = metadata.width
+            pic.height = metadata.height
 
-          cb(null, pic.asJson())
-        })
-
+            cb(null, pic.asJson())
+          })
+        } else {
+          cb() // drop all non image files
+        }
       }))
       .pipe(joinArray())
       .pipe(es.stringify())
