@@ -45,6 +45,16 @@ export default class Pic {
   static fromJson(attrs) {
     return new Pic(attrs)
   }
+
+  url(type) {
+    let hash
+    switch (type) {
+      case 'small':
+        hash = this.encode({resize: [100,100]})
+    }
+
+    return `/pics/pipeline/${hash}`
+  }
 }
 
 Pic.rootDir = 'pics/'
