@@ -16,7 +16,7 @@ let decodeAttrs = partial(tableTransform, decodeTable)
 let encodeFlow = flow(encodeAttrs, JSON.stringify, Base64.encodeURI)
 let decodeFlow = flow(Base64.decode, JSON.parse, decodeAttrs)
 
-class Pic {
+export default class Pic {
   constructor(attrs = {}) {
     merge(this, attrs)
   }
@@ -48,5 +48,3 @@ class Pic {
 }
 
 Pic.rootDir = 'pics/'
-
-module.exports = Pic
