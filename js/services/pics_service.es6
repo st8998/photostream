@@ -1,7 +1,7 @@
 import Pic from 'pic'
 import { map, partialRight } from 'lodash'
 
-export default function() {
+export default /*@ngInject*/ function() {
   let picsPromise
 
   return {

@@ -1,6 +1,6 @@
 import { reject } from 'lodash'
 
-export default function(picsService) {
+export default /*@ngInject*/ function(picsService) {
   return {
     restrict: 'E',
 
