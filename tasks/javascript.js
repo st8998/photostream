@@ -6,14 +6,21 @@ var browserify = require('browserify')
 var babelify = require('babelify')
 var annotate = require('gulp-ng-annotate')
 
+var slim = require('gulp-slim')
 var source = require('vinyl-source-stream')
 var buffer = require('gulp-buffer')
 var rev = require('gulp-rev')
 var del = require('del')
+var uglify = require('gulp-uglify')
+var util = require('gulp-util')
 
-var bundler = browserify('./js/app.es6', {debug: args['debug'], paths: ['./node_modules', './js/'], extensions: ['.js', '.es6']})
+function minify() {
+  return args['minify'] ?
+    uglify() :
+    util.noop()
+}
 
-var slim = require('gulp-slim')
+var bundler = browserify('./js/app.es6', {debug: !args['minify'], paths: ['./node_modules', './js/'], extensions: ['.js', '.es6']})
 
 bundler.transform(babelify).transform('brfs')
 
@@ -29,8 +36,10 @@ module.exports = function() {
       this.emit('end')
     })
     .pipe(source('bundle.js'))
-    .pipe(buffer()).pipe(rev())
+    .pipe(buffer())
     .pipe(annotate())
+    .pipe(minify())
+    .pipe(rev())
     .pipe(gulp.dest('./dest/public/js/'))
     .pipe(rev.manifest('dest/.rev-manifest', {base: process.cwd() + '/dest', merge: true})).pipe(gulp.dest('./dest/'))
 }

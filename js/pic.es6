@@ -50,7 +50,7 @@ export default class Pic {
     let hash
     switch (type) {
       case 'small':
-        hash = this.encode({resize: [100,100]})
+        hash = this.encode({resize: [200,200]})
     }
 
     return `/pics/pipeline/${hash}`
