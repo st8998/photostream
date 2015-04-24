@@ -1,6 +1,6 @@
 let Base64 = require('js-base64').Base64
 
-let {partial, flow, invert, transform, merge, omit, pick} = require('lodash')
+let {partial, flow, invert, transform, merge, omit, pick, values} = require('lodash')
 
 let encodeTable = {
   'resize': 'r',
@@ -38,19 +38,12 @@ export default class Pic {
     return new Pic({fileName: decoded.fileName, trans: omit(decoded, 'fileName')})
   }
 
-  asJson() {
-    return pick(this, 'fileName', 'width', 'height')
-  }
-
-  static fromJson(attrs) {
-    return new Pic(attrs)
-  }
-
   url(type) {
     let hash
     switch (type) {
       case 'small':
-        hash = this.encode({resize: [200,200]})
+        hash = this.encode({resize: [200,200], sharpen: []})
+        break
     }
 
     return `/pics/pipeline/${hash}`

@@ -1,4 +1,5 @@
 {
   "verbose": true,
-  "ignore": ["app.es6", "directives/*", "services/*"]
+  "ignore": ["app.es6", "directives/*", "services/*"],
+  "ext": "js es6"
 }

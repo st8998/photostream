@@ -5,7 +5,7 @@ let Pic = require('../js/pic')
 
 describe('Pic', function() {
   it('creates instances from json', function() {
-    let pic = Pic.fromJson({fileName: 'test.jpg', height: 100, width: 100})
+    let pic = new Pic({fileName: 'test.jpg', height: 100, width: 100})
     assert.equal(pic.fileName, 'test.jpg')
     assert.equal(pic.width, 100)
     assert.equal(pic.height, 100)

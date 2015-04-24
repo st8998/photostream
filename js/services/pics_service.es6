@@ -1,5 +1,6 @@
 import Pic from 'pic'
 import { map, partialRight } from 'lodash'
+import { reader } from 'transit'
 
 export default /*@ngInject*/ function() {
   let picsPromise
@@ -14,7 +15,10 @@ export default /*@ngInject*/ function() {
               return Promise.reject(new Error(res.statusText))
             }
           })
-          .then((res)=> res.json())
+          .then((res)=> res.text())
+          .then((text)=> {
+            return reader.read(text)
+          })
           .then(partialRight(map, Pic.fromJson))
     }
   }

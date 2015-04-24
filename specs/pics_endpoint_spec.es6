@@ -6,14 +6,15 @@ let sharp = require('sharp')
 let {findIndex, each} = require('lodash')
 
 let Pic = require('../js/pic')
+let { reader } = require('../js/transit')
 
 let app = express()
 app.use('/', require('../js/pics_endpoint'))
 
 describe('Pics Endpoint', function() {
   it('returns proper headers for json requests', function(end) {
-    request(app).get('/').set('Accept', 'application/json')
-      .expect('Content-Type', 'application/json').expect(200, end)
+    request(app).get('/').set('Accept', 'application/transit+json')
+      .expect('Content-Type', 'application/transit+json').expect(200, end)
   })
 
   it('returns 406 for not json requests', function(end) {
@@ -22,11 +23,12 @@ describe('Pics Endpoint', function() {
   })
 
   it('returns pics from sub directories', function(end) {
-    request(app).get('/').set('Accept', 'application/json')
+    request(app).get('/').set('Accept', 'application/transit+json')
       .expect(200)
       .end((err, res)=> {
-        assert.notEqual(findIndex(res.body, (attrs)=> attrs.fileName == 'test.jpg'), -1)
-        assert.notEqual(findIndex(res.body, (attrs)=> attrs.fileName == 'test/test.jpg'), -1)
+        let pics = reader.read(res.text)
+        assert.notEqual(findIndex(pics, (pic)=> pic.fileName == 'test.jpg'), -1)
+        assert.notEqual(findIndex(pics, (pic)=> pic.fileName == 'test/test.jpg'), -1)
 
         end()
       })
