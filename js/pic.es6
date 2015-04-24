@@ -1,6 +1,8 @@
-let Base64 = require('js-base64').Base64
+import res from 'res'
+import { Base64 } from 'js-base64'
+import { partial, flow, invert, transform, merge, omit, pick, values, mapValues, map } from 'lodash'
 
-let {partial, flow, invert, transform, merge, omit, pick, values} = require('lodash')
+let { round } = Math
 
 let encodeTable = {
   'resize': 'r',
@@ -38,15 +40,19 @@ export default class Pic {
     return new Pic({fileName: decoded.fileName, trans: omit(decoded, 'fileName')})
   }
 
-  url(type) {
-    let hash
-    switch (type) {
-      case 'small':
-        hash = this.encode({resize: [200,200], sharpen: []})
-        break
-    }
+  static normalizeTrans(trans) {
+    return mapValues(trans, (params, name)=> {
+      if (name == 'resize') {
+        let dppx = res.dppx()
+        return map(params, (dim)=> dim*dppx)
+      } else {
+        return params
+      }
+    })
+  }
 
-    return `/pics/pipeline/${hash}`
+  url(trans) {
+    return `/pics/pipeline/${this.encode(Pic.normalizeTrans(trans))}`
   }
 }
 

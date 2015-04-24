@@ -1,5 +1,4 @@
 h1 Photos
 ul
   li ng-repeat="pic in pics"
-    img ng-src="{{pic.url('small')}}"
-    span date: {{pic.date}}
+    img ng-src="{{pic.url({resize:[200,200], sharpen:[]})}}" width="200" height="200"
