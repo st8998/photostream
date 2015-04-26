@@ -21,6 +21,12 @@ function minify() {
 module.exports = function() {
   del('./dest/public/css/app*')
 
+  gulp.src([
+    './node_modules/photoswipe/dist/default-skin/default-skin.png',
+    './node_modules/photoswipe/dist/default-skin/default-skin.svg',
+    './node_modules/photoswipe/dist/default-skin/preloader.gif'
+  ]).pipe(gulp.dest(DEST))
+
   var scss = gulp.src('./css/app.scss')
     .pipe(changed(DEST, {extension: '.css'}))
     .pipe(sass({
@@ -35,7 +41,7 @@ module.exports = function() {
     })
 
   var css = gulp.src('./css/*.css')
-  var photoswipe = gulp.src('./node_modules/photoswipe/dist/photoswipe.css')
+  var photoswipe = gulp.src('./node_modules/photoswipe/dist/**/*.css')
 
   return es.merge(scss, css, photoswipe)
     .pipe(concat('app.css'))

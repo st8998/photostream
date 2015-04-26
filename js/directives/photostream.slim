@@ -4,7 +4,7 @@ ul.cards
       h1 {{pics[0].date.date()}}
       h2 {{pics[0].date.format('MMMM / YYYY')}}
     img ng-src="{{pics[0].url({resize:[1,1]})}}"
-  li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic)"
+  li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic)" ng-class="{'x2': $index % 6 == 0}"
     img ng-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
 
   /li.card.with-date.fri
@@ -34,11 +34,7 @@ ul.cards
         .pswp__counter
 
         button.pswp__button.pswp__button--close title="Close (Esc)"
-
-        button.pswp__button.pswp__button--share title="Share"
-
         button.pswp__button.pswp__button--fs title="Toggle fullscreen"
-
         button.pswp__button.pswp__button--zoom title="Zoom in/out"
 
         .pswp__preloader

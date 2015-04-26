@@ -19,7 +19,7 @@ router.get('/:hash', function(req, res) {
     reduce(
       pic.trans,
       (pipeline, attrs, method)=> pipeline[method].apply(pipeline, attrs),
-      sharp(pic.path()))
+      sharp(pic.path()).withMetadata().quality(100))
       .on('error', (err)=> res.status(404).end())
       .pipe(res)
 

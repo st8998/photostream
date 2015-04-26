@@ -43,7 +43,7 @@ export default class Pic {
   static normalizeTrans(trans) {
     return mapValues(trans, (params, name)=> {
       if (name == 'resize') {
-        let dppx = res.dppx()
+        let dppx = Math.min(2, res.dppx())
         return map(params, (dim)=> dim*dppx)
       } else {
         return params
