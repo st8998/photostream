@@ -25,7 +25,7 @@ describe('Images Pipeline', function() {
 
   beforeEach(function() {
     trans = {resize: [100, 100], sharpen: []}
-    pic = new Pic({fileName: 'test.jpg'})
+    pic = new Pic({fileName: 'test/test.jpg'})
   })
 
   it('returns 200 for proper hash requests', function(end) {

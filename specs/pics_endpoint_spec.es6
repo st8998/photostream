@@ -27,7 +27,6 @@ describe('Pics Endpoint', function() {
       .expect(200)
       .end((err, res)=> {
         let pics = reader.read(res.text)
-        assert.notEqual(findIndex(pics, (pic)=> pic.fileName == 'test.jpg'), -1)
         assert.notEqual(findIndex(pics, (pic)=> pic.fileName == 'test/test.jpg'), -1)
 
         end()

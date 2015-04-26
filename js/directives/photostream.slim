@@ -1,4 +1,57 @@
-h1 Photos
-ul
-  li ng-repeat="pic in pics"
-    img ng-src="{{pic.url({resize:[200,200], sharpen:[]})}}" width="200" height="200"
+ul.cards
+  li.card.with-date ng-class="pics[0].date.format('ddd')" ng-repeat-start="(day,pics) in dayGroups"
+    .date
+      h1 {{pics[0].date.date()}}
+      h2 {{pics[0].date.format('MMMM / YYYY')}}
+    img ng-src="{{pics[0].url({resize:[1,1]})}}"
+  li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic)"
+    img ng-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
+
+  /li.card.with-date.fri
+  /  .date
+  /    h1 12
+  /    h2 MARCH / 2015
+  /  img ng-src="{{pics[0].url({resize:[1,1]})}}"
+  /li.card ng-repeat="pic in pics"
+  /  img ng-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
+
+
+.pswp tabindex="-1" role="dialog" aria-hidden="true"
+
+  .pswp__bg
+
+  .pswp__scroll-wrap
+
+    .pswp__container
+      .pswp__item
+      .pswp__item
+      .pswp__item
+
+    .pswp__ui.pswp__ui--hidden
+
+      .pswp__top-bar
+
+        .pswp__counter
+
+        button.pswp__button.pswp__button--close title="Close (Esc)"
+
+        button.pswp__button.pswp__button--share title="Share"
+
+        button.pswp__button.pswp__button--fs title="Toggle fullscreen"
+
+        button.pswp__button.pswp__button--zoom title="Zoom in/out"
+
+        .pswp__preloader
+          .pswp__preloader__icn
+            .pswp__preloader__cut
+              .pswp__preloader__donut
+
+      .pswp__share-modal.pswp__share-modal--hidden.pswp__single-tap
+        .pswp__share-tooltip
+
+      button.pswp__button.pswp__button--arrow--left title="Previous (arrow left)"
+
+      button.pswp__button.pswp__button--arrow--right title="Next (arrow right)"
+
+      .pswp__caption
+        .pswp__caption__center

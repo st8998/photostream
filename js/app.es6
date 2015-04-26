@@ -6,8 +6,8 @@ import 'whatwg-fetch'
 let app = angular.module('app', [])
 
 
-app.run(function($rootScope) {
-  $rootScope.data = 'JOPPA DRILLER'
+app.run(function() {
+  // run hook
 })
 
 

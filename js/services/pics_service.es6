@@ -8,18 +8,16 @@ export default /*@ngInject*/ function() {
   return {
     all: function() {
       return picsPromise = picsPromise || picsPromise || fetch('/pics')
-          .then(function(res) {
-            if (res.status >= 200 && res.status < 300) {
-              return Promise.resolve(res)
-            } else {
-              return Promise.reject(new Error(res.statusText))
-            }
-          })
-          .then((res)=> res.text())
-          .then((text)=> {
-            return reader.read(text)
-          })
-          .then(partialRight(map, Pic.fromJson))
+        .then(function(res) {
+          if (res.status >= 200 && res.status < 300) {
+            return Promise.resolve(res)
+          } else {
+            return Promise.reject(new Error(res.statusText))
+          }
+        })
+        .then((res)=> res.text())
+        .then(reader.read.bind(reader))
+        .then(partialRight(map, Pic.fromJson))
     }
   }
 }

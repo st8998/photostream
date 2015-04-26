@@ -1,1 +1,116 @@
 @import "bourbon";
+
+@font-face {
+  font-family: 'Ostrich';
+  src: url('/static/ostrich-regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Ostrich';
+  src: url('/static/ostrich-light.ttf') format('truetype');
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: 'SixCaps';
+  src: url('/static/six-caps.regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+.Mon {
+  background: #e51400;
+}
+
+.Tue {
+  background: #996600;
+}
+
+.Wed {
+  background: #f09609;
+}
+
+.Thu {
+  background: #8cbf26;
+}
+
+.Fri {
+  background: #00aba9;
+}
+
+.Sat {
+  background: #a200ff;
+}
+
+.Sun {
+  background: #ff0097;
+}
+
+.container {
+  overflow: hidden;
+}
+
+.cards {
+  list-style: none;
+  margin: -2px 0 0 -2px;
+  padding: 0;
+  @include clearfix();
+
+  @for $i from 1 through 8 {
+    @media (min-width: #{if($i == 1, 0, $i)*300}px) and (max-width: #{($i+1)*300}px) {
+      .card {
+        width: #{100/($i+1)}%;
+        .date {
+          h1 {
+            font-size: #{100/($i+1)}vw;
+          }
+          h2 {
+            font-size: #{12/($i+1)}vw;
+          }
+        }
+      }
+    }
+  }
+
+  .card {
+    box-sizing: border-box;
+    border: 2px solid #fff;
+    margin: 0;
+    display: block;
+    float: left;
+
+    &.with-date {
+      position: relative;
+      img {
+        visibility: hidden;
+      }
+    }
+
+    .date {
+      position: absolute;
+      color: #fff;
+
+      h1, h2 {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        vertical-align: baseline;
+        font-family: 'Tulpen One', sans-serif;
+      }
+      h1 {
+        line-height: 0.75;
+        font-weight: lighter;
+      }
+      h2 {
+        text-transform: uppercase;
+        //font-size: 3vw;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+}

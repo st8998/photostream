@@ -3,6 +3,8 @@ dest
 .idea
 
 pics/*.jpg
+pics/photos/*.jpg
 pics/test/*.jpg
+pics/web/*.jpg
 !pics/test.jpg
 !pics/test/test.jpg

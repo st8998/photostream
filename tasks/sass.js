@@ -35,8 +35,9 @@ module.exports = function() {
     })
 
   var css = gulp.src('./css/*.css')
+  var photoswipe = gulp.src('./node_modules/photoswipe/dist/photoswipe.css')
 
-  return es.merge(css, scss)
+  return es.merge(scss, css, photoswipe)
     .pipe(concat('app.css'))
     .pipe(minify())
     .pipe(rev())
