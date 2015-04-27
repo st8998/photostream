@@ -2,6 +2,8 @@ import res from 'res'
 import { Base64 } from 'js-base64'
 import { partial, flow, invert, transform, merge, omit, pick, values, mapValues, map } from 'lodash'
 
+import { crc32 } from 'crc'
+
 let { round } = Math
 
 let encodeTable = {
@@ -21,6 +23,7 @@ let decodeFlow = flow(Base64.decode, JSON.parse, decodeAttrs)
 export default class Pic {
   constructor(attrs = {}) {
     merge(this, attrs)
+    this.id = crc32(this.fileName)
   }
 
   encode(trans) {
@@ -56,4 +59,5 @@ export default class Pic {
   }
 }
 
+//Pic.rootDir = '/Users/loki/Pictures/web/'
 Pic.rootDir = 'pics/'

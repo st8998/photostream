@@ -4,8 +4,8 @@ ul.cards
       h1 {{pics[0].date.date()}}
       h2 {{pics[0].date.format('MMMM / YYYY')}}
     img.background src="/static/1x1.gif"
-  li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic, $event)"
-    img.foreground m-waypoint-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
+  li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic, $event)" ng-class="{'x2-left': $index == 5, 'x2-right': $index == 9}"
+    img.foreground m-waypoint-src="{{pic.url({resize:[$index == 5 || $index == 9 ? 600 : 300,$index == 5 || $index == 9 ? 600 : 300], sharpen:[]})}}"
     img.background src="/static/1x1.gif"
 
 .pswp tabindex="-1" role="dialog" aria-hidden="true"

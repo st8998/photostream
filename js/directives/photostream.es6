@@ -13,15 +13,14 @@ export default /*@ngInject*/ function(picsService) {
       let $window = $(window)
       let photoSwipeEl = el.find('.pswp').get(0)
 
-      picsService.all().then(function(pics) {
+      picsService.all('photos').then(function(pics) {
         scope.dayGroups = chain(pics)
-          .filter((pic)=> pic.fileName.match(/photos/))
+          .each((pic, i)=> pic.pos = i)
           .groupBy((pic)=> pic.date.format('YYYY-MM-DD'))
           .values()
           .value()
 
         scope.galleryPics = chain(pics)
-          .filter((pic)=> pic.fileName.match(/photos/))
           .map((pic)=> ({fileName: pic.fileName, w: 1280, h: 1280*pic.height/pic.width, src: pic.url({resize: [1280]})}))
           .value()
 

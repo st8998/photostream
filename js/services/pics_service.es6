@@ -1,13 +1,11 @@
 import Pic from 'pic'
-import { map, partialRight } from 'lodash'
+import { map, partialRight, memoize } from 'lodash'
 import { reader } from 'transit'
 
 export default /*@ngInject*/ function() {
-  let picsPromise
-
   return {
-    all: function() {
-      return picsPromise = picsPromise || picsPromise || fetch('/pics')
+    all: memoize(function(folder = '') {
+      return fetch('/pics/' + folder)
         .then(function(res) {
           if (res.status >= 200 && res.status < 300) {
             return Promise.resolve(res)
@@ -18,6 +16,6 @@ export default /*@ngInject*/ function() {
         .then((res)=> res.text())
         .then(reader.read.bind(reader))
         .then(partialRight(map, Pic.fromJson))
-    }
+    })
   }
 }

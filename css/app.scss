@@ -43,8 +43,9 @@
       .card {
         width: #{100/($i+1)}%;
 
-        &.x2 {
+        &.x2-left, &.x2-right {
           width: #{200/($i+1)}%;
+          margin-bottom: -1px;
         }
         .date {
           h1 {
@@ -58,13 +59,24 @@
     }
   }
 
+  line-height: 0;
+  font-size: 0;
+
   .card {
     box-sizing: border-box;
     border: 2px solid #fff;
     margin: 0;
-    display: block;
-    float: left;
+    display: inline-block;
     position: relative;
+
+    &.x2-right {
+      float: right;
+      clear: right;
+    }
+    &.x2-left {
+      float: left;
+      clear: left;
+    }
 
     img {
       width: 100%;

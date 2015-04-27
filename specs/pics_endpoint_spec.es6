@@ -32,4 +32,16 @@ describe('Pics Endpoint', function() {
         end()
       })
   })
+
+  it('filter pics by folders', function(end) {
+    request(app).get('/test').set('Accept', 'application/transit+json')
+      .expect(200)
+      .end((err, res)=> {
+        let pics = reader.read(res.text)
+        assert.equal(pics.length, 1)
+        assert.equal(pics[0].fileName, 'test/test.jpg')
+
+        end()
+      })
+  })
 })
