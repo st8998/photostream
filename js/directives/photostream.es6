@@ -28,14 +28,19 @@ export default /*@ngInject*/ function(picsService) {
         scope.$digest()
       })
 
-      scope.open = function(pic) {
+      scope.open = function(pic, e) {
         let gallery = new PhotoSwipe(
           photoSwipeEl,
           PhotoSwipeUI,
           scope.galleryPics,
           {
             index: findIndex(scope.galleryPics, (p)=> p.fileName == pic.fileName),
-            history: false
+            history: false,
+            showHideOpacity: true,
+            getThumbBoundsFn: function() {
+              let card = $(e.currentTarget)
+              return {x: card.offset().left, y: card.offset().top, w: card.width()}
+            }
           })
         gallery.init()
       }

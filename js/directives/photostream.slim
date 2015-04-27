@@ -4,16 +4,9 @@ ul.cards
       h1 {{pics[0].date.date()}}
       h2 {{pics[0].date.format('MMMM / YYYY')}}
     img ng-src="{{pics[0].url({resize:[1,1]})}}"
-  li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic)"
+  li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic, $event)"
     img ng-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
 
-  /li.card.with-date.fri
-  /  .date
-  /    h1 12
-  /    h2 MARCH / 2015
-  /  img ng-src="{{pics[0].url({resize:[1,1]})}}"
-  /li.card ng-repeat="pic in pics"
-  /  img ng-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
 
 
 .pswp tabindex="-1" role="dialog" aria-hidden="true"
