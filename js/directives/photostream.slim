@@ -1,13 +1,12 @@
 ul.cards
-  li.card.with-date ng-class="pics[0].date.format('ddd')" ng-repeat-start="(day,pics) in dayGroups"
+  li.card ng-class="pics[0].date.format('ddd')" ng-repeat-start="(day,pics) in dayGroups"
     .date
       h1 {{pics[0].date.date()}}
       h2 {{pics[0].date.format('MMMM / YYYY')}}
-    img ng-src="{{pics[0].url({resize:[1,1]})}}"
+    img.background src="/static/1x1.gif"
   li.card ng-repeat-end="" ng-repeat="pic in pics" ng-click="open(pic, $event)"
-    img ng-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
-
-
+    img.foreground m-waypoint-src="{{pic.url({resize:[300,300], sharpen:[]})}}"
+    img.background src="/static/1x1.gif"
 
 .pswp tabindex="-1" role="dialog" aria-hidden="true"
 

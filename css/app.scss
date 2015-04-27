@@ -64,12 +64,22 @@
     margin: 0;
     display: block;
     float: left;
+    position: relative;
 
-    &.with-date {
-      position: relative;
-      img {
-        visibility: hidden;
-      }
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    img.foreground {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    img.background {
+      visibility: hidden;
     }
 
     .date {
@@ -91,12 +101,6 @@
         text-transform: uppercase;
         //font-size: 3vw;
       }
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      display: block;
     }
   }
 }
