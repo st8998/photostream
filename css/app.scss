@@ -47,6 +47,9 @@
           width: #{200/($i+1)}%;
           margin-bottom: -1px;
         }
+        .more {
+          font-size: #{24/($i+1)}vw;
+        }
         .date {
           h1 {
             font-size: #{100/($i+1)}vw;

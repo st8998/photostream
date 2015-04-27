@@ -14,6 +14,7 @@ app.run(function() {
 // directives goes here
 app.directive('photostream', require('directives/photostream'))
 app.directive('mWaypointSrc', require('directives/waypoint_src'))
+app.directive('mWaypointMore', require('directives/waypoint_more'))
 
 
 // services goes here

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { writer } from './transit'
 import { pics } from './db'
+import moment from 'moment'
 
 let router = Router()
 
@@ -10,12 +11,15 @@ router.get('/:folder?', function(req, res) {
   res.type('application/transit+json')
 
   pics.then(function(pics) {
-    res.end(writer.write(
-      pics.chain()
-        .where((pic)=> pic.fileName.indexOf(req.params.folder || '') != -1)
-        .simplesort('date', true)
-        .data()
-    ))
+    let query = pics.chain()
+            .where((pic)=> pic.fileName.indexOf(req.params.folder || '') != -1)
+
+    if (req.query.from)
+      query = query.find({'timestamp': {'$lt': parseInt(req.query.from)}})
+
+    query = query.simplesort('date', true).limit(req.query.limit || 50)
+
+    res.end(writer.write(query.data()))
   })
 
 })

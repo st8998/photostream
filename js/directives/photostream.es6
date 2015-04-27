@@ -13,19 +13,28 @@ export default /*@ngInject*/ function(picsService) {
       let $window = $(window)
       let photoSwipeEl = el.find('.pswp').get(0)
 
-      picsService.all('photos').then(function(pics) {
-        scope.dayGroups = chain(pics)
-          .each((pic, i)=> pic.pos = i)
-          .groupBy((pic)=> pic.date.format('YYYY-MM-DD'))
-          .values()
-          .value()
+      scope.$watch(
+        ()=> picsService.all('photos'),
+        (promise)=> {
+          promise.then(function(pics) {
+            scope.dayGroups = chain(pics)
+              .each((pic, i)=> pic.pos = i)
+              .groupBy((pic)=> pic.date.format('YYYY-MM-DD'))
+              .values()
+              .value()
 
-        scope.galleryPics = chain(pics)
-          .map((pic)=> ({fileName: pic.fileName, w: 1280, h: 1280*pic.height/pic.width, src: pic.url({resize: [1280]})}))
-          .value()
+            scope.galleryPics = chain(pics)
+              .map((pic)=> ({fileName: pic.fileName, w: 1280, h: 1280*pic.height/pic.width, src: pic.url({resize: [1280]})}))
+              .value()
 
-        scope.$digest()
-      })
+            scope.$digest()
+          })
+        }
+      )
+
+      scope.loadMore = function() {
+        return picsService.loadMore('photos')
+      }
 
       scope.open = function(pic, e) {
         let gallery = new PhotoSwipe(

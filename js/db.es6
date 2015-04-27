@@ -24,6 +24,8 @@ export const pics = new Promise(function(resolve, reject) {
     } else {
       pic.date = fs.statSync(pic.path()).ctime
     }
+
+    pic.timestamp = pic.date.valueOf()
     cb(null, pic)
   }
 
