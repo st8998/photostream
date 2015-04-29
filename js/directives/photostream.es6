@@ -1,7 +1,9 @@
-import { filter, groupBy, chain, map, findIndex } from 'lodash'
+import { filter, groupBy, chain, map, findIndex, debounce } from 'lodash'
 
 import PhotoSwipe from 'photoswipe'
 import PhotoSwipeUI from 'photoswipe/dist/photoswipe-ui-default'
+
+import { writer } from 'transit'
 
 export default /*@ngInject*/ function(picsService) {
   return {
@@ -25,7 +27,7 @@ export default /*@ngInject*/ function(picsService) {
             promise.then(function(pics) {
               scope.dayGroups = chain(pics)
                 .each((pic, i)=> pic.pos = i)
-                .groupBy((pic)=> pic.date.format('YYYY-MM-DD'))
+                .groupBy((pic)=> pic.date.format())
                 .values()
                 .value()
 
@@ -45,11 +47,10 @@ export default /*@ngInject*/ function(picsService) {
 
 
       // HISTORY API
-      window.addEventListener('popstate', function() {
-        console.log('POPSTATE')
-        folder = location.pathname.substring(1)
-        scope.$digest()
-      })
+      scope.updateState = debounce(function(currentDay, dayGroups) {
+        let pics = chain(dayGroups).filter((dayPics)=> dayPics[0].date.format() >= currentDay).flatten().value()
+        history.replaceState({pics: {[folder]: writer.write(pics)}}, currentDay, `?${currentDay}`)
+      }, 500)
 
 
       // GALLERY

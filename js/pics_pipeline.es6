@@ -10,11 +10,16 @@ let Pic = require('./pic')
 let picFolder = './pics/'
 let router = express.Router()
 
+import { crc32 } from 'crc'
+
 router.get('/:hash', function(req, res) {
   try {
     let pic = Pic.decode(req.params.hash)
 
-    res.append('Cache-Control', `public, max-age=${ms('1 year')}`)
+    res.set('Cache-Control', `public, max-age=${ms('1 year')}`)
+    res.set('etag', crc32(req.params.hash))
+
+    if (req.fresh) return res.status(304).end()
 
     reduce(
       pic.trans,

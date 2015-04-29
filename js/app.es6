@@ -1,7 +1,11 @@
 import angular from 'angular'
 import { map } from 'lodash'
+import moment from 'moment'
 
 import 'whatwg-fetch'
+
+moment.defaultFormat = 'YYYY-MM-DD'
+
 
 let app = angular.module('app', [])
 
@@ -13,6 +17,7 @@ app.run(function() {
 
 // directives goes here
 app.directive('photostream', require('directives/photostream'))
+app.directive('mWaypoint', require('directives/waypoint'))
 app.directive('mWaypointSrc', require('directives/waypoint_src'))
 app.directive('mWaypointMore', require('directives/waypoint_more'))
 
