@@ -59,5 +59,6 @@ export default class Pic {
   }
 }
 
+Pic.rootDir = '/Users/loki/Pictures/syncable/'
 //Pic.rootDir = '/Users/loki/Pictures/web/'
-Pic.rootDir = 'pics/'
+//Pic.rootDir = 'pics/'

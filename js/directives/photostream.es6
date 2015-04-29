@@ -11,34 +11,51 @@ export default /*@ngInject*/ function(picsService) {
 
     link: function(scope, el, attrs) {
       let $window = $(window)
-      let photoSwipeEl = el.find('.pswp').get(0)
 
-      scope.$watch(
-        ()=> picsService.all('photos'),
-        (promise)=> {
-          promise.then(function(pics) {
-            scope.dayGroups = chain(pics)
-              .each((pic, i)=> pic.pos = i)
-              .groupBy((pic)=> pic.date.format('YYYY-MM-DD'))
-              .values()
-              .value()
+      let collectionWatcher
+      let folder = location.pathname.substring(1)
 
-            scope.galleryPics = chain(pics)
-              .map((pic)=> ({fileName: pic.fileName, w: 1280, h: 1280*pic.height/pic.width, src: pic.url({resize: [1280]})}))
-              .value()
+      scope.$watch(()=> folder, ()=> {
+        if (collectionWatcher) collectionWatcher()
 
-            scope.$digest()
-          })
-        }
-      )
+        // DATA LOADING
+        collectionWatcher = scope.$watch(
+          ()=> picsService.all(folder),
+          (promise)=> {
+            promise.then(function(pics) {
+              scope.dayGroups = chain(pics)
+                .each((pic, i)=> pic.pos = i)
+                .groupBy((pic)=> pic.date.format('YYYY-MM-DD'))
+                .values()
+                .value()
+
+              scope.galleryPics = chain(pics)
+                .map((pic)=> ({fileName: pic.fileName, w: 1280, h: 1280*pic.height/pic.width, src: pic.url({resize: [1280]})}))
+                .value()
+
+              scope.$digest()
+            })
+          }
+        )
+      })
 
       scope.loadMore = function() {
-        return picsService.loadMore('photos')
+        return picsService.loadMore(folder)
       }
 
+
+      // HISTORY API
+      window.addEventListener('popstate', function() {
+        console.log('POPSTATE')
+        folder = location.pathname.substring(1)
+        scope.$digest()
+      })
+
+
+      // GALLERY
       scope.open = function(pic, e) {
         let gallery = new PhotoSwipe(
-          photoSwipeEl,
+          el.find('.pswp').get(0),
           PhotoSwipeUI,
           scope.galleryPics,
           {
@@ -53,6 +70,8 @@ export default /*@ngInject*/ function(picsService) {
         gallery.init()
       }
 
+
+      // MARKUP
       function setContainerSize() {
         el.find('.cards').css({width: $window.width() + 4})
       }

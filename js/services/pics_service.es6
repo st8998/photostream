@@ -29,6 +29,9 @@ export default /*@ngInject*/ function() {
     loadMore: function(folder = '') {
       return new Promise((resolve)=> {
         folders[folder] = this.all(folder).then((pics)=> {
+          if (!pics.length)
+            return resolve(false) && folders[folder]
+
           return fetchTransit(`/pics/${folder}?from=${pics[pics.length-1].date.valueOf()}`)
             .then((newPics)=> {
               resolve(newPics.length != 0)

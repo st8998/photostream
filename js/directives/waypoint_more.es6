@@ -13,7 +13,6 @@ export default /*@ngInject*/ function() {
         },
         handler: function() {
           setTimeout(()=> {
-            console.log('LOAD MORE')
             waypoint.disable()
             scope.$apply(()=> scope.$eval(attrs['mWaypointMore'])
               .then((hasMore)=> { if (hasMore) waypoint.enable()}))

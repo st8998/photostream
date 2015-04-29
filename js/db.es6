@@ -21,6 +21,8 @@ export const pics = new Promise(function(resolve, reject) {
     let match
     if (match = pic.fileName.match(/(\d{12})-.*\.jpg/)) {
       pic.date = moment(match[1], 'YYYYMMDDHHmm')
+    } else if (match = pic.fileName.match(/(\d{8})-.*\.jpg/)) {
+      pic.date = moment(match[1], 'YYYYMMDD')
     } else {
       pic.date = fs.statSync(pic.path()).ctime
     }
