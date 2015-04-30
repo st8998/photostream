@@ -1,9 +1,13 @@
-import { filter, groupBy, chain, map, findIndex, debounce } from 'lodash'
+import { filter, groupBy, chain, map, findIndex, debounce, find } from 'lodash'
 
 import PhotoSwipe from 'photoswipe'
 import PhotoSwipeUI from 'photoswipe/dist/photoswipe-ui-default'
 
+import Pic from 'pic'
+
 import { writer } from 'transit'
+
+let { max } = Math
 
 export default /*@ngInject*/ function(picsService) {
   return {
@@ -31,9 +35,7 @@ export default /*@ngInject*/ function(picsService) {
                 .values()
                 .value()
 
-              scope.galleryPics = chain(pics)
-                .map((pic)=> ({fileName: pic.fileName, w: 1280, h: 1280*pic.height/pic.width, src: pic.url({resize: [1280]})}))
-                .value()
+              scope.galleryPics = pics
 
               scope.$digest()
             })
@@ -68,6 +70,16 @@ export default /*@ngInject*/ function(picsService) {
               return {x: card.offset().left, y: card.offset().top, w: card.width()}
             }
           })
+
+        gallery.listen('gettingData', function(index, pic) {
+          let viewSize = max(gallery.viewportSize.x, gallery.viewportSize.y)
+
+          let size = find(Pic.sizes, (size)=> size >= viewSize) || Pic.sizes[Pic.sizes.length-1]
+
+          pic.src = pic.url({resize: [size]});
+          [pic.w, pic.h] = pic.width > pic.height ? [size, size*pic.height/pic.width] : [size*pic.width/pic.height, size]
+        })
+
         gallery.init()
       }
 
