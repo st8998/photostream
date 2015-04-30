@@ -1,5 +1,6 @@
-import { filter, groupBy, chain, map, findIndex, debounce, find } from 'lodash'
+import { chain, findIndex, debounce, find, template, each } from 'lodash'
 
+import moment from 'moment'
 import PhotoSwipe from 'photoswipe'
 import PhotoSwipeUI from 'photoswipe/dist/photoswipe-ui-default'
 
@@ -9,7 +10,11 @@ import { writer } from 'transit'
 
 let { max } = Math
 
-export default /*@ngInject*/ function(picsService) {
+export default /*@ngInject*/ function(picsService, $compile) {
+  let cardTmpl = template('<li class="card <%= enlargeClass %>"><img class="foreground" m-waypoint-src="<%= src %>" /><img class="background" src="/static/1x1.gif" /></li>')
+  let dateCardTmpl = template('<li class="card <%= weekDay %>"><div class="date"><h1><%= main %></h1><h2><%= sub %></h2></div><img class="background" src="/static/1x1.gif" /></li>')
+
+
   return {
     restrict: 'E',
 
@@ -18,25 +23,18 @@ export default /*@ngInject*/ function(picsService) {
     link: function(scope, el, attrs) {
       let $window = $(window)
 
+
+      // DATA LOADING
       let collectionWatcher
       let folder = location.pathname.substring(1)
-
       scope.$watch(()=> folder, ()=> {
         if (collectionWatcher) collectionWatcher()
 
-        // DATA LOADING
         collectionWatcher = scope.$watch(
           ()=> picsService.all(folder),
           (promise)=> {
             promise.then(function(pics) {
-              scope.dayGroups = chain(pics)
-                .each((pic, i)=> pic.pos = i)
-                .groupBy((pic)=> pic.date.format())
-                .values()
-                .value()
-
-              scope.galleryPics = pics
-
+              scope.rawPics = pics
               scope.$digest()
             })
           }
@@ -48,6 +46,40 @@ export default /*@ngInject*/ function(picsService) {
       }
 
 
+      // RENDERING
+      let cards = el.find('.cards')
+
+      cards.on('click', '.card .foreground', (e)=> scope.open($('.card .foreground').index($(e.currentTarget)), e))
+
+      scope.$watchCollection('rawPics', function(pics, oldPics) {
+        if (pics && pics.length) {
+          let lastDay = oldPics && oldPics[oldPics.length-1].date.format()
+
+          let fragment = ''
+
+          chain(pics)
+            .drop(oldPics && oldPics.length || 0)
+            .each((pic, i)=> pic.pos = i)
+            .groupBy((pic)=> pic.date.format())
+            .each((pics, day)=> {
+              let mDay = moment(day)
+              if (day != lastDay)
+                fragment += dateCardTmpl({weekDay: mDay.format('ddd').toLowerCase(), main: mDay.date(), sub: mDay.format('MMMM / YYYY')})
+
+              each(pics, (pic, i)=> {
+                let enlargeClass = i == 5 ? 'x2-left' : i == 9 ? 'x2-right' : ''
+                let size = i == 5 || i == 9 ? 600 : 300
+                fragment += cardTmpl({src: pic.url({resize: [size, size], sharpen: []}), enlargeClass: enlargeClass})
+              })
+            })
+            .value()
+
+          fragment += '<li m-waypoint-more="loadMore()" />'
+
+          cards.append($compile(fragment)(scope))
+        }
+      })
+
       // HISTORY API
       scope.updateState = debounce(function(currentDay, dayGroups) {
         let pics = chain(dayGroups).filter((dayPics)=> dayPics[0].date.format() >= currentDay).flatten().value()
@@ -56,13 +88,13 @@ export default /*@ngInject*/ function(picsService) {
 
 
       // GALLERY
-      scope.open = function(pic, e) {
+      scope.open = function(index, e) {
         let gallery = new PhotoSwipe(
           el.find('.pswp').get(0),
           PhotoSwipeUI,
-          scope.galleryPics,
+          scope.rawPics,
           {
-            index: findIndex(scope.galleryPics, (p)=> p.fileName == pic.fileName),
+            index: index,
             history: false,
             showHideOpacity: true,
             getThumbBoundsFn: function() {

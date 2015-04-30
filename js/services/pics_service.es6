@@ -25,14 +25,13 @@ export default /*@ngInject*/ function() {
   let folders = {}
 
   if (history.state && history.state.pics) {
-    console.log('RESTORE STATE')
     each(history.state.pics, (pics, folder)=> folders[folder] = Promise.resolve(reader.read(pics)))
   }
 
 
   return {
     all: wrap(function(folder = '') {
-      return fetchTransit('/pics/' + folder).then(partial(updateState, folder))
+      return fetchTransit(`/pics/${folder}`).then(partial(updateState, folder))
     }, function(func, folder) {
       return folders[folder] = folders[folder] || func(folder)
     }),

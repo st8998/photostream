@@ -1,13 +1,13 @@
 ul.cards
-  li.card ng-class="pics[0].date.format('ddd')" ng-repeat-start="pics in dayGroups track by $index"
-    .date
-      h1 {{pics[0].date.date()}}
-      h2 {{pics[0].date.format('MMMM / YYYY')}}
-    img.background src="/static/1x1.gif"
-  li.card ng-repeat-end="" ng-repeat="pic in pics track by pic.fileName" ng-click="open(pic, $event)" ng-class="{'x2-left': $index == 5, 'x2-right': $index == 9}"
-    img.foreground m-waypoint-src="{{pic.url({resize:[$index == 5 || $index == 9 ? 600 : 300,$index == 5 || $index == 9 ? 600 : 300], sharpen:[]})}}"
-    img.background src="/static/1x1.gif"
-  li ng-if="dayGroups.length" m-waypoint-more="loadMore()"
+  /li.card ng-class="pics[0].date.format('ddd')" ng-repeat-start="pics in dayGroups track by $index"
+  /  .date
+  /    h1 {{pics[0].date.date()}}
+  /    h2 {{pics[0].date.format('MMMM / YYYY')}}
+  /  img.background src="/static/1x1.gif"
+  /li.card ng-repeat-end="" ng-repeat="pic in pics track by pic.fileName" ng-click="open(pic, $event)" ng-class="{'x2-left': $index == 5, 'x2-right': $index == 9}"
+  /  img.foreground m-waypoint-src="{{pic.url({resize:[$index == 5 || $index == 9 ? 600 : 300,$index == 5 || $index == 9 ? 600 : 300], sharpen:[]})}}"
+  /  img.background src="/static/1x1.gif"
+  /li ng-if="dayGroups.length" m-waypoint-more="loadMore()"
 
 
 .pswp tabindex="-1" role="dialog" aria-hidden="true"

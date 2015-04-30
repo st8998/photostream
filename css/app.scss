@@ -1,30 +1,35 @@
 @import "bourbon";
 
-.Mon {
+@font-face {
+  font-family: 'Tulpen One';
+  src: url('/static/TulpenOne-Regular.ttf');
+}
+
+.mon {
   background: #e51400;
 }
 
-.Tue {
+.tue {
   background: #996600;
 }
 
-.Wed {
+.wed {
   background: #f09609;
 }
 
-.Thu {
+.thu {
   background: #8cbf26;
 }
 
-.Fri {
+.fri {
   background: #00aba9;
 }
 
-.Sat {
+.sat {
   background: #a200ff;
 }
 
-.Sun {
+.sun {
   background: #ff0097;
 }
 

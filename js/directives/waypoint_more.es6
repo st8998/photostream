@@ -1,7 +1,7 @@
 import 'waypoints/lib/jquery.waypoints'
 import { debounce } from 'lodash'
 
-export default /*@ngInject*/ function() {
+export default /*@ngInject*/ function($timeout) {
   return {
     restrict: 'A',
     scope: false,
@@ -10,32 +10,23 @@ export default /*@ngInject*/ function() {
       let dirName = this.name
 
       return function(scope, el, attrs) {
-        console.log('WAYPOINT LINK')
+        // wait until all dom manipulations finished
+        $timeout(function() {
+          let waypoint = new Waypoint({
+            element: el,
+            enabled: true,
+            offset: function() {
+              return Waypoint.viewportHeight() + 300
+            },
+            handler: function() {
+              console.log('LOAD MORE')
+              el.remove()
+              scope.$apply(()=> scope.$eval(attrs[dirName]))
+            }
+          })
 
-        let waypoint = new Waypoint({
-          element: el,
-          enabled: false,
-          offset: function() {
-            return Waypoint.viewportHeight() + 300
-          },
-          handler: function() {
-            console.log('WAYPOINT MORE')
-            console.log('WAYPOINT DISABLE')
-
-            waypoint.disable()
-            scope.$apply(()=> scope.$eval(attrs[dirName])
-              .then((hasMore)=> {
-                if (hasMore) {
-                  console.log('WAYPOINT ENABLE')
-                  setTimeout(waypoint.enable.bind(waypoint), 100)
-                }
-              }))
-          }
-        })
-
-        setTimeout(waypoint.enable.bind(waypoint), 1000)
-
-        el.on('$destroy', ()=> waypoint.destroy())
+          el.on('$destroy', ()=> waypoint.destroy())
+        }, 0)
       }
     }
   }
