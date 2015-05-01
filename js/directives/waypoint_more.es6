@@ -16,7 +16,7 @@ export default /*@ngInject*/ function($timeout) {
             element: el,
             enabled: true,
             offset: function() {
-              return Waypoint.viewportHeight() + 300
+              return Waypoint.viewportHeight() + 600
             },
             handler: function() {
               console.log('LOAD MORE')
