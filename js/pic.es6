@@ -55,7 +55,8 @@ export default class Pic {
   }
 
   url(trans) {
-    return `/pics/pipeline/${this.encode(Pic.normalizeTrans(trans))}`
+    //return `/pics/pipeline/${this.encode(Pic.normalizeTrans(trans))}`
+    return `http://d1b9r9h4o1t0v2.cloudfront.net/pics/pipeline/${this.encode(Pic.normalizeTrans(trans))}`
   }
 }
 
@@ -63,4 +64,4 @@ Pic.sizes = [640, 1280]
 
 //Pic.rootDir = '/Users/loki/Pictures/syncable/'
 //Pic.rootDir = '/Users/loki/Pictures/web/'
-Pic.rootDir = '/mnt/photostream/'
+Pic.rootDir = '/mnt/photostream/syncable/'

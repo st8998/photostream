@@ -8,15 +8,15 @@ gulp.task('clean', function(end) { del('./dest', end) })
 
 gulp.task('javascript', ['slim_directives'], require('./tasks/javascript'))
 
-gulp.task('watch', function() {
-  sequence('clean', ['javascript', 'javascript_vendor', 'sass', 'static'], 'slim', function() {
-    gulp.watch(['static/**/*'], ['static'])
-    gulp.watch(['css/**/*.scss'], ['sass'])
-    gulp.watch(['js/**/*.es6', 'package.json', 'js/**/*.slim'], ['javascript'])
-    gulp.watch(['package.json'], ['javascript_vendor'])
-    gulp.watch(['pages/**/*.slim', 'dest/.rev-manifest'], ['slim'])
-  })
+gulp.task('watch', ['build'], function() {
+  gulp.watch(['static/**/*'], ['static'])
+  gulp.watch(['css/**/*.scss'], ['sass'])
+  gulp.watch(['js/**/*.es6', 'package.json', 'js/**/*.slim'], ['javascript'])
+  gulp.watch(['package.json'], ['javascript_vendor'])
+  gulp.watch(['pages/**/*.slim', 'dest/.rev-manifest'], ['slim'])
 })
+
+gulp.task('build', sequence('clean', ['javascript', 'javascript_vendor', 'sass', 'static'], 'slim'))
 
 gulp.task('default', ['clean', 'javascript', 'javascript_vendor', 'less'], function() {
   return gulp.start('slim')
