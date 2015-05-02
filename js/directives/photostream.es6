@@ -94,6 +94,7 @@ export default /*@ngInject*/ function(picsService, $compile) {
           PhotoSwipeUI,
           scope.rawPics,
           {
+            barsSize: {top: 0, bottom: 0},
             index: index,
             history: false,
             showHideOpacity: true,
@@ -108,7 +109,7 @@ export default /*@ngInject*/ function(picsService, $compile) {
 
           let size = find(Pic.sizes, (size)=> size >= viewSize) || Pic.sizes[Pic.sizes.length-1]
 
-          pic.src = pic.url({resize: [size]});
+          pic.src = pic.url({resize: pic.width > pic.height ? [size, null] : [null, size]});
           [pic.w, pic.h] = pic.width > pic.height ? [size, size*pic.height/pic.width] : [size*pic.width/pic.height, size]
         })
 
