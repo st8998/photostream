@@ -1,0 +1,53 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = '2'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define 'local' do |config|
+
+    config.vm.provider :virtualbox do |vb|
+      vb.customize ['modifyvm', :id, '--memory', '512']
+    end
+
+    config.vm.box = 'precise64'
+
+    config.vm.provision 'ansible' do |ansible|
+      ansible.playbook = 'provisioning/playbook.yml'
+    end
+  end
+
+  ocean_ip = '46.101.142.30'
+
+  config.vm.define 'ocean_initial' do |config|
+    config.vm.box = 'dummy'
+
+    config.vm.provider :managed do |managed, override|
+      managed.server = ocean_ip
+      override.ssh.username = 'root'
+      override.ssh.private_key_path = '/Users/loki/.ssh/id_rsa'
+    end
+
+    config.vm.provision 'ansible' do |ansible|
+      ansible.playbook = 'provisioning/playbook.yml'
+      ansible.tags = 'deployer'
+    end
+  end
+
+  config.vm.define 'ocean' do |config|
+    config.vm.box = 'dummy'
+
+    config.vm.provider :managed do |managed, override|
+      managed.server = ocean_ip
+      override.ssh.username = 'deploy'
+      override.ssh.private_key_path = '/Users/loki/.ssh/id_rsa'
+    end
+
+    config.vm.provision 'ansible' do |ansible|
+      ansible.playbook = 'provisioning/playbook.yml'
+      # ansible.skip_tags = 'deployer'
+      ansible.tags = ['app']
+    end
+  end
+end

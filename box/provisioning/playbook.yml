@@ -1,0 +1,45 @@
+---
+- hosts: all
+  sudo: yes
+
+  tasks:
+    # updates apt cache once a week
+    - apt: update_cache=true cache_valid_time=604800
+      tags: apt-cache
+
+    - apt: pkg={{item}}
+      with_items:
+        - make
+        - g++
+        - vim-nox
+        - curl
+        - pkg-config
+      tags: packages
+
+    - include: app.yml
+      tags: app
+
+    - include: deployer.yml
+      tags: deployer
+
+    - include: nodejs.yml
+      tags: nodejs
+
+    - include: nginx.yml
+      tags: nginx
+      vars:
+        application: photostream
+
+    - include: btsync.yml
+      tags: btsync
+
+  handlers:
+    - name: restart btsync
+      service: name=btsync state=restarted
+
+    - name: restart nginx
+      service: name=nginx state=restarted
+
+    - name: restart app
+      service: name=photostream state=restarted
+

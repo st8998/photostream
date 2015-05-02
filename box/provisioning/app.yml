@@ -1,0 +1,25 @@
+# this was done through ssh
+#- command: "curl -s https://raw.githubusercontent.com/lovell/sharp/master/preinstall.sh | sudo bash -"
+
+- name: create app directory
+  file: path=/var/www/photostream state=directory
+
+- name: copy files
+  synchronize:
+    src=./../../{{ item.src }}
+    dest=/var/www/photostream
+  with_items:
+    - {src: js }
+    - {src: dest }
+    - {src: package.json }
+    - {src: pics }
+  notify: restart app
+
+- npm: path=/var/www/photostream production=yes
+
+- template: src=files/app.j2 dest=/etc/init/photostream.conf
+  notify: restart app
+
+- command: ln -sf /etc/nginx/sites-available/photostream /etc/nginx/sites-enabled/photostream
+
+

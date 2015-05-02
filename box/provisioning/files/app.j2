@@ -1,0 +1,5 @@
+chdir /var/www/photostream
+setuid {{ansible_ssh_user}}
+respawn
+
+exec node js/server.js > production.log 2>&1

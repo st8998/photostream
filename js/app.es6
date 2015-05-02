@@ -2,7 +2,9 @@ import angular from 'angular'
 import { map } from 'lodash'
 import moment from 'moment'
 
-import 'whatwg-fetch'
+// polyfills
+require('whatwg-fetch')
+require('es6-promise').polyfill()
 
 moment.defaultFormat = 'YYYY-MM-DD'
 

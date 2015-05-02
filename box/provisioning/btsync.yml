@@ -1,0 +1,13 @@
+- name: Install GPG key for btsync
+  apt_key:
+    id=6BF18B15
+    state=present
+    url=http://stinkfoot.org:11371/pks/lookup?op=get&search=0x40FC0CD26BF18B15
+
+- name: Add the deb repo for btsync
+  apt_repository:
+    repo='deb http://debian.yeasoft.net/btsync wheezy main'
+    state=present
+
+- name: Install btsync
+  apt: pkg=btsync state=installed
