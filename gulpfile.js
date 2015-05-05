@@ -16,8 +16,6 @@ gulp.task('watch', ['build'], function() {
   gulp.watch(['pages/**/*.slim', 'dest/.rev-manifest'], ['slim'])
 })
 
-gulp.task('build', sequence('clean', ['javascript', 'javascript_vendor', 'sass', 'static'], 'slim'))
-
-gulp.task('default', ['clean', 'javascript', 'javascript_vendor', 'less'], function() {
-  return gulp.start('slim')
+gulp.task('build', function() {
+  sequence('clean', ['javascript', 'javascript_vendor', 'sass', 'static'], 'slim')
 })
