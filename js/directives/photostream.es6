@@ -67,7 +67,7 @@ export default /*@ngInject*/ function(picsService, $compile) {
                 fragment += dateCardTmpl({weekDay: mDay.format('ddd').toLowerCase(), main: mDay.date(), sub: mDay.format('MMMM / YYYY')})
 
               each(pics, (pic, i)=> {
-                let enlargeClass = i == 5 ? 'x2-left' : i == 9 ? 'x2-right' : ''
+                let enlargeClass = i == 5 ? 'x2 x2-left' : i == 9 ? 'x2 x2-right' : ''
                 let size = i == 5 || i == 9 ? 600 : 300
                 fragment += cardTmpl({src: pic.url({resize: [size, size], sharpen: []}), enlargeClass: enlargeClass})
               })

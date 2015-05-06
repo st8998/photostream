@@ -48,7 +48,7 @@
       .card {
         width: #{100/($i+1)}%;
 
-        &.x2-left, &.x2-right {
+        &.x2 {
           width: #{200/($i+1)}%;
           margin-bottom: -1px;
         }
