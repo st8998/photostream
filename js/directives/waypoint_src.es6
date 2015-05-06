@@ -17,7 +17,7 @@ export default /*@ngInject*/ function($timeout) {
 
           new Waypoint({
             element: el,
-            offset: top ? -600 : ()=> Waypoint.viewportHeight(),
+            offset: top ? -600 : ()=> 2*Waypoint.viewportHeight(),
             handler: function(direction) {
               if (direction == "up" || !top) {
                 console.log('LOAD PIC', direction, top)

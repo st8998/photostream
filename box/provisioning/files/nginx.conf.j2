@@ -2,6 +2,8 @@ upstream {{application}} {
   server localhost:4000;
 }
 
+proxy_cache_path /var/www/cache levels=2:2 keys_zone=pipeline:200m inactive=365d max_size=10g;
+
 server {
   gzip on;
   listen 80;
@@ -11,7 +13,13 @@ server {
   client_max_body_size 10m;
 
   gzip_types text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript application/json;                                                                      
-  root /var/www/moments/current/public;
+
+  location /pics/pipeline {
+    proxy_cache pipeline;
+    proxy_cache_use_stale updating;
+
+    proxy_pass http://{{application}};
+  }
 
   location / {
     proxy_pass http://{{application}}; # match the name of upstream directive which is defined above

@@ -15,9 +15,7 @@ export default /*@ngInject*/ function($timeout) {
           let waypoint = new Waypoint({
             element: el,
             enabled: true,
-            offset: function() {
-              return Waypoint.viewportHeight() + 600
-            },
+            offset: ()=> 2*Waypoint.viewportHeight(),
             handler: function() {
               console.log('LOAD MORE')
               el.remove()
