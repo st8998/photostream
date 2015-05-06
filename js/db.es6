@@ -33,7 +33,7 @@ function initDB(db) {
 
 export const pics = new Promise(function(resolve, reject) {
   initDB(new loki('photostream', {autosave: true, autosaveInterval: 1000})).then(function(db) {
-    let collection = db.getCollection('pics', {})
+    let collection = db.getCollection('pics', {indices: ['fileName']})
 
     function applyDate(pic, cb) {
       let match
