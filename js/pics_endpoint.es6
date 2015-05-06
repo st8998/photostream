@@ -7,14 +7,14 @@ import config from './config'
 let router = Router()
 let defaultFolder = config.picsEndpoint.defaultFolder
 
-router.get('/:folder?', function(req, res) {
+router.get('/*', function(req, res) {
   if (!req.accepts('application/transit+json')) return res.status(406).end()
 
   res.type('application/transit+json')
 
   pics.then(function(pics) {
     let query = pics.chain()
-            .where((pic)=> pic.fileName.indexOf(req.params.folder || defaultFolder) == 0)
+            .where((pic)=> pic.fileName.indexOf(req.params[0] || defaultFolder) == 0)
 
     if (req.query.from)
       query = query.find({'timestamp': {'$lt': parseInt(req.query.from)}})
