@@ -1,6 +1,7 @@
 import Pic from 'pic'
 import { map, partialRight, partial, wrap, each, chain } from 'lodash'
 import { reader, writer } from 'transit'
+import config from 'config'
 
 function fetchTransit() {
   return fetch.apply(this, arguments)
@@ -24,7 +25,7 @@ function updateState(folder, pics) {
 export default /*@ngInject*/ function() {
   let folders = {}
 
-  if (history.state && history.state.pics) {
+  if (history.state && history.state.pics && config.picsService.refreshProof) {
     each(history.state.pics, (pics, folder)=> folders[folder] = Promise.resolve(reader.read(pics)))
   }
 

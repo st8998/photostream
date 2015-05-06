@@ -4,6 +4,7 @@ var args = require('yargs').argv
 
 var browserify = require('browserify')
 var babelify = require('babelify')
+var envify = require('envify')
 var annotate = require('gulp-ng-annotate')
 
 var slim = require('gulp-slim')
@@ -20,9 +21,16 @@ function minify() {
     util.noop()
 }
 
-var bundler = browserify('./js/app.es6', {debug: !args['minify'], paths: ['./node_modules', './js/'], extensions: ['.js', '.es6']})
+var bundler = browserify('./js/app.es6', {
+  debug: !args['minify'],
+  paths: ['./node_modules', './js/'],
+  extensions: ['.js', '.es6']
+})
 
-bundler.transform(babelify).transform('brfs')
+bundler
+  .transform(babelify)
+  .transform('brfs')
+  .transform(envify)
 
 // remove vendor libs from app bundle
 require('../package.json').vendor.forEach(function(dep) { bundler.external(dep) })

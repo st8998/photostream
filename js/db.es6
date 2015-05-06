@@ -32,7 +32,7 @@ function initDB(db) {
 
 
 export const pics = new Promise(function(resolve, reject) {
-  initDB(new loki('photostream')).then(function(db) {
+  initDB(new loki('photostream', {autosave: true, autosaveInterval: 1000})).then(function(db) {
     let collection = db.getCollection('pics', {})
 
     function applyDate(pic, cb) {
@@ -68,13 +68,26 @@ export const pics = new Promise(function(resolve, reject) {
       }
     }
 
+    function take(count) {
+      return function(pic, cb) {
+        console.log(count)
+        if (count < 0) {
+          cb()
+        } else {
+          count -= 1
+          cb(null, pic)
+        }
+      }
+    }
+
     readdir(Pic.rootDir, function(err, files) {
       let pics = chain(files)
         .filter((fileName)=> fileName.match(/(jpg|png|gif)$/))
-        .map((fileName)=> new Pic({fileName: fileName.substring(Pic.rootDir.length, 1000)}))
+        .map((fileName)=> new Pic({fileName: fileName.substring(Pic.rootDir.length)}))
 
       es.readArray(pics.value())
         .pipe(es.map(filterScanned))
+        .pipe(es.map(take(500)))
         .pipe(es.map(applyDate))
         .pipe(es.map(applyDims))
         .on('data', function(pic) {

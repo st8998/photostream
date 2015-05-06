@@ -2,9 +2,12 @@ node_modules
 dest
 .idea
 
+photostream
+
 pics/*.jpg
 pics/photos/*.jpg
 pics/test/*.jpg
 pics/web/*.jpg
+pics/web/*.png
 !pics/test.jpg
 !pics/test/test.jpg
