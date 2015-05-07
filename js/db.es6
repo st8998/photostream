@@ -6,6 +6,7 @@ import sharp from 'sharp'
 import readdir from 'recursive-readdir'
 import moment from 'moment'
 import es from 'event-stream'
+import config from './config'
 
 import { chain, assign } from 'lodash'
 
@@ -32,7 +33,7 @@ function initDB(db) {
 
 
 export const pics = new Promise(function(resolve, reject) {
-  initDB(new loki('photostream', {autosave: true, autosaveInterval: 1000})).then(function(db) {
+  initDB(new loki(config.db.name, config.db)).then(function(db) {
     let collection = db.getCollection('pics', {indices: ['fileName']})
 
     function applyDate(pic, cb) {

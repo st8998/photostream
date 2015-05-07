@@ -9,12 +9,12 @@ pics.then(function(pics) {
         let pic = new Pic({fileName: 'test.jpg'})
 
         pics.insert(pic)
-        assert.equal(pics.findOne({id: pic.id}), pic)
+        assert.equal(pics.findOne({fileName: pic.fileName}), pic)
       })
 
       it('scan root image folder for pics', function() {
         let testPic = new Pic({fileName: 'test/test.jpg'})
-        assert.equal(pics.find({id: testPic.id}).length, 1)
+        assert.equal(pics.find({fileName: testPic.fileName}).length, 1)
       })
 
       it('returns array of pics', function() {
