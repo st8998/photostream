@@ -4,7 +4,7 @@ import { partial, flow, invert, transform, merge, omit, pick, values, mapValues,
 
 import config from './config'
 
-let { round } = Math
+let { round, floor, min } = Math
 
 let encodeTable = {
   'resize': 'r',
@@ -45,7 +45,7 @@ export default class Pic {
   static normalizeTrans(trans) {
     return mapValues(trans, (params, name)=> {
       if (name == 'resize') {
-        let dppx = Math.min(2, res.dppx())
+        let dppx = floor(min(2, res.dppx()))
         return map(params, (dim)=> dim*dppx)
       } else {
         return params
