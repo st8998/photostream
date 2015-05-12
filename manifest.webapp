@@ -1,0 +1,14 @@
+{
+  "name": "Photostream",
+  "description": "Simple photo streaming service",
+  "launch_path": "/",
+  "icons": {
+    "256": "/static/icon-256.png",
+    "128": "/static/icon-128.png"
+  },
+  "developer": {
+    "name": "Ivan Efremov",
+    "url": "https://github.com/st8998"
+  },
+  "default_locale": "en"
+}
