@@ -26,6 +26,7 @@ export default /*@ngInject*/ function() {
   let folders = {}
 
   if (history.state && history.state.pics && config.picsService.refreshProof) {
+    console.log('LOAD STATE')
     each(history.state.pics, (pics, folder)=> folders[folder] = Promise.resolve(reader.read(pics)))
   }
 

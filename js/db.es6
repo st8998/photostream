@@ -2,13 +2,14 @@ import fs from 'fs'
 import loki from 'lokijs'
 
 import Pic from './pic'
-import sharp from 'sharp'
 import readdir from 'recursive-readdir'
 import moment from 'moment'
 import es from 'event-stream'
 import config from './config'
+import chokidar from 'chokidar'
+import sizeOf from 'image-size'
 
-import { chain, assign } from 'lodash'
+import { chain, assign, noop } from 'lodash'
 
 function initDB(db) {
   return new Promise(function(resolve, reject) {
@@ -31,12 +32,30 @@ function initDB(db) {
   })
 }
 
+function sync(fn) {
+  let queue = []
+  let inAction = false
+
+  function next() {
+    inAction = false
+
+    if (queue.length) {
+      inAction = true
+      fn.apply(this, queue.shift())
+    }
+  }
+
+  return function(...args) {
+    queue.push([next].concat(args))
+    if (!inAction) next()
+  }
+}
 
 export const pics = new Promise(function(resolve, reject) {
   initDB(new loki(config.db.name, config.db)).then(function(db) {
     let collection = db.getCollection('pics', {indices: ['fileName']})
 
-    function applyDate(pic, cb) {
+    function applyDate(pic) {
       let match
       if (match = pic.fileName.match(/(\d{12})-.*\.jpg/)) {
         pic.date = moment(match[1], 'YYYYMMDDHHmm')
@@ -47,57 +66,39 @@ export const pics = new Promise(function(resolve, reject) {
       }
 
       pic.timestamp = pic.date.valueOf()
-      cb(null, pic)
     }
 
-    function applyDims(pic, cb) {
-      sharp(pic.path()).metadata((err, metadata)=> {
-        if (err) return cb()
-
-        pic.width = metadata.width
-        pic.height = metadata.height
-
-        cb(null, pic)
+    function applyDims(pic, next) {
+      sizeOf(pic.path(), function(err, dims) {
+        assign(pic, dims)
+        next()
       })
     }
 
-    function filterScanned(pic, cb) {
-      if (collection.findOne({fileName: pic.fileName})) {
-        cb()
-      } else {
-        cb(null, pic)
-      }
-    }
+    // add/remove/change watcher
+    let watcher = chokidar.watch(Pic.rootDir + '**/*')
 
-    function take(count) {
-      return function(pic, cb) {
-        console.log(count)
-        if (count < 0) {
-          cb()
-        } else {
-          count -= 1
-          cb(null, pic)
-        }
-      }
-    }
+    watcher.on('add', sync(function(next, path) {
+      let pic = new Pic({fileName: path.substring(Pic.rootDir.length)})
 
-    readdir(Pic.rootDir, function(err, files) {
-      let pics = chain(files)
-        .filter((fileName)=> fileName.match(/(jpg|png|gif)$/))
-        .map((fileName)=> new Pic({fileName: fileName.substring(Pic.rootDir.length)}))
+      if (!path.match(/(jpg|png|gif)$/)) return next()
+      if (collection.findOne({fileName: pic.fileName})) return next()
 
-      es.readArray(pics.value())
-        .pipe(es.map(filterScanned))
-        .pipe(es.map(take(500)))
-        .pipe(es.map(applyDate))
-        .pipe(es.map(applyDims))
-        .on('data', function(pic) {
-          collection.insert(pic)
-        })
-        .on('end', function() {
-          db.saveDatabase()
-          resolve(collection)
-        })
+      applyDate(pic, noop)
+      applyDims(pic, next)
+
+      collection.insert(pic)
+    }))
+
+    watcher.on('unlink', function(path) {
+      let pic = new Pic({fileName: path.substring(Pic.rootDir.length)})
+      collection.removeWhere({fileName: pic.fileName})
+
+      db.saveDatabase()
+    })
+
+    watcher.on('ready', function() {
+      resolve(collection)
     })
   })
 })
