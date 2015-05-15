@@ -68,11 +68,8 @@ export const pics = new Promise(function(resolve, reject) {
       pic.timestamp = pic.date.valueOf()
     }
 
-    function applyDims(pic, next) {
-      sizeOf(pic.path(), function(err, dims) {
-        assign(pic, dims)
-        next()
-      })
+    function applyDims(pic) {
+      assign(pic, sizeOf(pic.path()))
     }
 
     // add/remove/change watcher
@@ -84,10 +81,17 @@ export const pics = new Promise(function(resolve, reject) {
       if (!path.match(/(jpg|png|gif)$/)) return next()
       if (collection.findOne({fileName: pic.fileName})) return next()
 
-      applyDate(pic, noop)
-      applyDims(pic, next)
+      try {
+        applyDate(pic, noop)
+        applyDims(pic, noop)
 
-      collection.insert(pic)
+        collection.insert(pic)
+      } catch(e) {
+        console.error(e)
+      }
+      finally {
+        next()
+      }
     }))
 
     watcher.on('unlink', function(path) {
