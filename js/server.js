@@ -10,12 +10,15 @@ var ms = require('ms')
 var picsPipeline = require('./pics_pipeline')
 var picsEndpoint = require('./pics_endpoint')
 
+var config = require('./config')
 
 var app = express()
 
 app.use(logger('dev'))
 
-app.use('/pics/pipeline', picsPipeline)
+if (!config.picsPipeline.separate)
+  app.use('/pics/pipeline', picsPipeline)
+
 app.use('/pics', picsEndpoint)
 
 app.use('/', express.static('dest/public', {maxAge: ms('1 year')}))

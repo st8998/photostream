@@ -7,7 +7,6 @@ let ms = require('ms')
 
 let Pic = require('./pic')
 
-let picFolder = './pics/'
 let router = express.Router()
 
 import { crc32 } from 'crc'

@@ -15,6 +15,9 @@ config.development = {
   picsService: {
     refreshProof: false
   },
+  picsPipeline: {
+    separate: false
+  },
   picsEndpoint: {
     defaultFolder: 'photos'
   }
@@ -36,6 +39,9 @@ config.production = merge({}, config.development, {
   },
   picsService: {
     refreshProof: true
+  },
+  picsPipeline: {
+    separate: true
   },
   picsEndpoint: {
     defaultFolder: 'syncable'

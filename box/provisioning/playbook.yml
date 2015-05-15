@@ -14,6 +14,7 @@
         - vim-nox
         - curl
         - pkg-config
+        - tee
       tags: packages
 
     - include: app.yml
@@ -42,4 +43,7 @@
 
     - name: restart app
       service: name=photostream state=restarted
+
+    - name: restart pipeline
+      service: name=photostream_pipeline state=restarted
 

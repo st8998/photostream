@@ -13,12 +13,17 @@
     - {src: dest }
     - {src: package.json }
     - {src: pics }
-  notify: restart app
+  notify:
+    - restart app
+    - restart pipeline
 
 - npm: path=/var/www/photostream production=yes
 
 - template: src=files/app.j2 dest=/etc/init/photostream.conf
   notify: restart app
+
+- template: src=files/pipeline.j2 dest=/etc/init/photostream_pipeline.conf
+  notify: restart pipeline
 
 - command: ln -sf /etc/nginx/sites-available/photostream /etc/nginx/sites-enabled/photostream
 

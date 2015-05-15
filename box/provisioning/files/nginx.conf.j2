@@ -2,6 +2,10 @@ upstream {{application}} {
   server localhost:4000;
 }
 
+upstream {{application}}-pipeline {
+  server localhost:4001;
+}
+
 proxy_cache_path /var/www/cache levels=2:2 keys_zone=pipeline:200m inactive=365d max_size=10g;
 
 server {
@@ -18,7 +22,7 @@ server {
     proxy_cache pipeline;
     proxy_cache_use_stale updating;
 
-    proxy_pass http://{{application}};
+    proxy_pass http://{{application}}-pipeline;
   }
 
   location / {
