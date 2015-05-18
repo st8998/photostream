@@ -11,6 +11,10 @@ let router = express.Router()
 
 import { crc32 } from 'crc'
 
+process.env.UV_THREADPOOL_SIZE = 1
+sharp.concurrency(1)
+sharp.cache(0, 0)
+
 router.get('/:hash', function(req, res) {
   try {
     let pic = Pic.decode(req.params.hash)

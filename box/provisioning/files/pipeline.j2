@@ -1,6 +1,6 @@
 chdir /var/www/photostream
 setuid {{ansible_ssh_user}}
 respawn
-limit rss 314572800 314572800
+limit rss 200000000 200000000
 env NODE_ENV=production
 exec node js/pipeline_server.js 2>&1 | tee -a production.log
