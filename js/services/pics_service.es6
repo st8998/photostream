@@ -14,7 +14,6 @@ function fetchTransit() {
     })
     .then((res)=> res.text())
     .then(reader.read.bind(reader))
-    .then(partialRight(map, Pic.fromJson))
 }
 
 function updateState(folder, pics) {
