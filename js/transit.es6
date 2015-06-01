@@ -33,3 +33,16 @@ export const reader = transit.reader('json', {
     finalize: function(ret, node) { return ret }
   }
 })
+
+export const fetchTransit = function() {
+  return fetch.apply(this, arguments)
+    .then(function(res) {
+      if (res.status >= 200 && res.status < 300) {
+        return Promise.resolve(res)
+      } else {
+        return Promise.reject(new Error(res.statusText))
+      }
+    })
+    .then((res)=> res.text())
+    .then(reader.read.bind(reader))
+}

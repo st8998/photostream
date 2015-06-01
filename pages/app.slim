@@ -4,7 +4,6 @@ html
     title Photostream
     script src="/static/jquery-2.1.3.min.js"
     script src="/js/vendor.js"
-    script src="/js/bundle.js"
     link rel="stylesheet" type="text/css" href="/css/app.css"
     meta name="viewport" content="width=device-width, initial-scale=1"
 
@@ -15,3 +14,41 @@ html
 body[ng-app="app" ng-strict-di]
   .container
     photostream
+
+  .pswp tabindex="-1" role="dialog" aria-hidden="true"
+
+    .pswp__bg
+
+    .pswp__scroll-wrap
+
+      .pswp__container
+        .pswp__item
+        .pswp__item
+        .pswp__item
+
+      .pswp__ui.pswp__ui--hidden
+
+        .pswp__top-bar
+
+          .pswp__counter
+
+          button.pswp__button.pswp__button--close title="Close (Esc)"
+          button.pswp__button.pswp__button--fs title="Toggle fullscreen"
+          button.pswp__button.pswp__button--zoom title="Zoom in/out"
+
+          .pswp__preloader
+            .pswp__preloader__icn
+              .pswp__preloader__cut
+                .pswp__preloader__donut
+
+        .pswp__share-modal.pswp__share-modal--hidden.pswp__single-tap
+          .pswp__share-tooltip
+
+        button.pswp__button.pswp__button--arrow--left title="Previous (arrow left)"
+
+        button.pswp__button.pswp__button--arrow--right title="Next (arrow right)"
+
+        .pswp__caption
+          .pswp__caption__center
+
+  script src="/js/bundle.js"
