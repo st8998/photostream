@@ -1,4 +1,5 @@
-import React from 'react/dist/react.min'
+import React from 'react'
+import $ from 'zepto'
 import { map, reduce } from 'lodash'
 
 let more = React.createFactory(require('components/waypoint_more'))

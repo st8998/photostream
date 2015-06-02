@@ -3,18 +3,34 @@
   "version": "1.0.0",
   "description": "Simple photo streaming service",
   "author": "Ivan Efremov",
+  "browser": {
+    "zepto": "./static/zepto_custom_1.1.6.js",
+    "react": "react/dist/react.min",
+    "rx": "rx/dist/rx.lite.min",
+    "waypoints": "waypoints/lib/noframework.waypoints",
+    "photoswipe-ui": "photoswipe/dist/photoswipe-ui-default"
+  },
+  "browserify-shim": {
+    "zepto": "$"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
   "vendor": [
-    "react/dist/react.min",
-    "rx/dist/rx.lite",
+    "zepto",
+    "react",
+    "rx",
     "js-base64",
     "lodash",
     "whatwg-fetch",
     "transit-js",
     "res",
     "photoswipe",
-    "photoswipe/dist/photoswipe-ui-default",
+    "photoswipe-ui",
     "moment",
-    "waypoints/lib/noframework.waypoints",
+    "waypoints",
     "crc",
     "es6-promise"
   ],
@@ -46,9 +62,11 @@
     "whatwg-fetch": "^0.8.1"
   },
   "devDependencies": {
+    "aliasify": "^1.7.2",
     "babelify": "^5.0.3",
     "brfs": "^1.4.0",
     "browserify": "^10.1.3",
+    "browserify-shim": "^3.8.7",
     "chai": "^2.3.0",
     "chalk": "^1.0.0",
     "del": "^1.1.1",

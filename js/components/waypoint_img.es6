@@ -1,5 +1,8 @@
-import React from 'react/dist/react.min'
+import React from 'react'
+import $ from 'zepto'
 import { merge } from 'lodash'
+
+console.log($)
 
 let { img } = React.DOM
 
@@ -32,7 +35,7 @@ export default class WaypointImg extends React.Component {
     let $img = $(img)
 
     $img.css({opacity: 0})
-    if (img.complete || img.naturalWidth+img.naturalWidth > 0) {
+    if (img.complete || img.naturalWidth > 0) {
       $img.css({opacity: 1})
     } else {
       $img.one('load', function() { $img.css({opacity: 1, transition: 'opacity .3s'}) })

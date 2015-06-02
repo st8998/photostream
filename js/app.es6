@@ -1,22 +1,23 @@
 import moment from 'moment'
-import React from 'react/dist/react.min'
-import Rx from 'rx/dist/rx.lite'
+import React from 'react'
+import Rx from 'rx'
 
 import { fetchTransit } from 'transit'
 
 import PhotoSwipe from 'photoswipe'
-import PhotoSwipeUI from 'photoswipe/dist/photoswipe-ui-default'
+import PhotoSwipeUI from 'photoswipe-ui'
 
 import Pic from 'pic'
 
 import { find, merge, findIndex } from 'lodash'
+
 let { max } = Math
 
 let photostream = React.createFactory(require('components/photostream'))
 
 
 // load waypoints library globally
-import 'waypoints/lib/noframework.waypoints'
+import 'waypoints'
 
 // polyfills
 require('whatwg-fetch')
@@ -27,12 +28,14 @@ moment.defaultFormat = 'YYYY-MM-DD'
 let bus = new Rx.Subject()
 let hasMore = true // UGLY shared variable
 
+let folder = location.pathname.substring(1)
+
 let loadBus = bus
   .filter(({action})=> action == 'load' && hasMore)
   .distinctUntilChanged()
   .flatMap(({action, since})=>
     Rx.Observable.fromPromise(
-      fetchTransit(`/pics?from=${since}`)))
+      fetchTransit(`/pics/${folder}?from=${since}`)))
   .publish()
 
 loadBus.filter((pics)=> pics.length == 0).forEach(()=> hasMore = false)
