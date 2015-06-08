@@ -76,6 +76,7 @@
     "gulp-cache": "^0.2.9",
     "gulp-changed": "^1.2.1",
     "gulp-concat": "^2.5.2",
+    "gulp-eslint": "^0.13.2",
     "gulp-less": "^3.0.3",
     "gulp-minify-css": "^1.1.1",
     "gulp-mocha": "^2.0.1",

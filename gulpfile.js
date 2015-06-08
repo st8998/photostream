@@ -1,4 +1,4 @@
-var gulp = require('./tasks')(['javascript_vendor', 'slim', 'slim_directives', 'less', 'sass', 'spec', 'static'])
+var gulp = require('./tasks')(['javascript_vendor', 'slim', 'slim_directives', 'less', 'sass', 'spec', 'static', 'lint'])
 
 var sequence = require('run-sequence')
 
@@ -17,5 +17,5 @@ gulp.task('watch', ['build'], function() {
 })
 
 gulp.task('build', function() {
-  sequence('clean', ['javascript', 'javascript_vendor', 'sass', 'static'], 'slim')
+  sequence('clean', ['javascript', 'javascript_vendor', 'sass', 'static'], 'slim', 'lint')
 })

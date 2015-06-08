@@ -1,4 +1,4 @@
-let {reduce} = require('lodash')
+let { reduce } = require('lodash')
 let express = require('express')
 let sharp = require('sharp')
 

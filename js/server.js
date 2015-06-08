@@ -1,3 +1,5 @@
+'use strict'
+
 require("babel/register")
 
 var fs = require('fs')
