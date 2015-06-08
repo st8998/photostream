@@ -2,8 +2,6 @@ import React from 'react'
 import $ from 'zepto'
 import { merge } from 'lodash'
 
-console.log($)
-
 let { img } = React.DOM
 
 export default class WaypointImg extends React.Component {
