@@ -2,9 +2,8 @@ import React from 'react'
 import $ from 'zepto'
 import { map, reduce } from 'lodash'
 
-let more = React.createFactory(require('components/waypoint_more'))
-let waypointImg = React.createFactory(require('components/waypoint_img'))
-let { ul, li, img, div, h1, h2 } = React.DOM
+import More from 'components/waypoint_more'
+import WaypointImg from 'components/waypoint_img'
 
 class DateCard extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -13,14 +12,17 @@ class DateCard extends React.Component {
 
   render() {
     let date = this.props.date
-    return li({className: `card ${date.format('ddd').toLowerCase()}`, key: date.format()},
-      div({className: 'date'}, [
-        h1(null, date.date()),
-        h2(null, date.format('MMMM / YYYY'))]),
-      img({className: 'background', src: '/static/1x1.gif'}))
+    return (
+      <li className={`card ${date.format('ddd').toLowerCase()}`} key={date.format()}>
+        <div className="date">
+          <h1>{date.date()}</h1>
+          <h2>{date.format('MMMM / YYYY')}</h2>
+        </div>
+        <img src="/static/1x1.gif" className="background"/>
+      </li>
+    )
   }
 }
-let dateCard = React.createFactory(DateCard)
 
 class PicCard extends React.Component {
   openGallery(pic) {
@@ -41,15 +43,14 @@ class PicCard extends React.Component {
   render() {
     let pic = this.props.pic
 
-    return li({className: ['card', this.props.className].join(' '), key: pic.fileName, onClick: this.openGallery.bind(this, pic)}, [
-      waypointImg({className: 'foreground', src: pic.url({
-        resize: pic.starred? [600, 600] : [300, 300], sharpen: []
-      })}),
-      img({className: 'background', src: '/static/1x1.gif'})
-    ])
+    return (
+      <li className={['card', this.props.className].join(' ')} key={pic.fileName} onClick={this.openGallery.bind(this, pic)}>
+        <WaypointImg className="foreground" src={pic.url({resize: pic.starred? [600, 600] : [300, 300], sharpen: []})} />
+        <img src="/static/1x1.gif" className="background"/>
+      </li>
+    )
   }
 }
-let picCard = React.createFactory(PicCard)
 
 export default class Photostream extends React.Component {
   constructor(props) {
@@ -70,17 +71,14 @@ export default class Photostream extends React.Component {
     let lastDate = reduce(this.props.pics, (currDate, pic, i)=> {
       if (i % 5 == 0) pic.starred = true
 
-      if (!pic.date.isSame(currDate, 'day')) cards.push(dateCard({date: pic.date}))
+      if (!pic.date.isSame(currDate, 'day')) cards.push(<DateCard date={pic.date} />)
 
-      cards.push(picCard({
-        pic, es: this.props.es,
-        className: pic.starred? x2class() : ''
-      }))
+      cards.push(<PicCard pic={pic} es={this.props.es} className={pic.starred? x2class() : ''} />)
       return pic.date
     })
 
-    cards.push(more({es: this.props.es, since: lastDate ? lastDate.valueOf() : ''}))
+    cards.push(<More es={this.props.es} since={lastDate? lastDate.valueOf() : ''} />)
 
-    return ul({className: 'cards'}, cards)
+    return <ul className="cards">{ cards }</ul>
   }
 }

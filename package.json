@@ -92,6 +92,7 @@
     "mocha": "^2.2.4",
     "node-bourbon": "^4.2.2",
     "node-neat": "^1.7.1-beta1",
+    "reactify": "^1.1.1",
     "run-sequence": "^1.1.0",
     "supertest": "^0.15.0",
     "through2": "^0.6.5",

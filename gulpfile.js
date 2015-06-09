@@ -11,7 +11,7 @@ gulp.task('javascript', ['slim_directives'], require('./tasks/javascript'))
 gulp.task('watch', ['build'], function() {
   gulp.watch(['static/**/*'], ['static'])
   gulp.watch(['css/**/*.scss'], ['sass'])
-  gulp.watch(['js/**/*.es6', 'package.json', 'js/**/*.slim'], ['javascript'])
+  gulp.watch(['js/**/*.es6', 'js/**/*.jsx', 'package.json', 'js/**/*.slim'], ['javascript'])
   gulp.watch(['package.json'], ['javascript_vendor'])
   gulp.watch(['pages/**/*.slim', 'dest/.rev-manifest'], ['slim'])
 })

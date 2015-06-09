@@ -13,6 +13,7 @@ var buffer = require('gulp-buffer')
 var rev = require('gulp-rev')
 var del = require('del')
 var uglify = require('gulp-uglify')
+var reactify = require('reactify')
 var util = require('gulp-util')
 
 function minify() {
@@ -24,11 +25,12 @@ function minify() {
 var bundler = browserify('./js/app.es6', {
   debug: !args['minify'],
   paths: ['./node_modules', './js/'],
-  extensions: ['.js', '.es6']
+  extensions: ['.js', '.es6', '.jsx']
 })
 
 bundler
   .transform(babelify)
+  .transform(reactify)
   .transform('brfs')
   .transform(envify)
 
