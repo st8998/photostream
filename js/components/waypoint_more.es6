@@ -15,7 +15,7 @@ export default class WaypointMore extends React.Component {
       offset: ()=> 2*Waypoint.viewportHeight(),
       handler: function() {
         this.destroy()
-        comp.props.es.onNext({action: 'load', since: comp.props.since})
+        comp.props.emitter.emit('load', {since: comp.props.since})
       }
     })
   }

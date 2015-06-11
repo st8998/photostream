@@ -5,8 +5,6 @@
   "author": "Ivan Efremov",
   "browser": {
     "zepto": "./static/zepto_custom_1.1.6.js",
-    "react": "react/dist/react.min",
-    "rx": "rx/dist/rx.lite.min",
     "waypoints": "waypoints/lib/noframework.waypoints",
     "photoswipe-ui": "photoswipe/dist/photoswipe-ui-default"
   },
@@ -21,7 +19,7 @@
   "vendor": [
     "zepto",
     "react",
-    "rx",
+    "most",
     "js-base64",
     "lodash",
     "whatwg-fetch",
@@ -55,11 +53,11 @@
     "react": "^0.13.3",
     "recursive-readdir": "^1.2.1",
     "res": "^0.3.0",
-    "rx": "^2.5.2",
     "sharp": "^0.10.0",
     "transit-js": "^0.8.795",
     "waypoints": "^3.1.1",
-    "whatwg-fetch": "^0.8.1"
+    "whatwg-fetch": "^0.8.1",
+    "most": "^0.14.0"
   },
   "devDependencies": {
     "aliasify": "^1.7.2",

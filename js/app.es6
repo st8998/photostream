@@ -1,6 +1,7 @@
 import moment from 'moment'
 import React from 'react'
-import Rx from 'rx'
+import Most from 'most'
+import Events from 'events'
 
 import { fetchTransit } from 'transit'
 
@@ -25,34 +26,39 @@ require('es6-promise').polyfill()
 
 moment.defaultFormat = 'YYYY-MM-DD'
 
-let bus = new Rx.Subject()
+let emitter = new Events.EventEmitter()
 let hasMore = true // UGLY shared variable
 
 let folder = location.pathname.substring(1)
 
-let loadBus = bus
-  .filter(({action})=> action == 'load' && hasMore)
-  .distinctUntilChanged()
-  .flatMap(({action, since})=>
-    Rx.Observable.fromPromise(
-      fetchTransit(`/pics/${folder}?from=${since}`)))
-  .publish()
+let fromGalleryEvent = function(gallery, event) {
+  return Most.create(function(add) {
+    gallery.listen(event, add)
+  })
+}
 
-loadBus.filter((pics)=> pics.length == 0).forEach(()=> hasMore = false)
-
-let picsBus = loadBus.scan((pics, loadedPics)=> pics.concat(loadedPics))
-
-// RENDER STREAM
-picsBus.forEach(function(pics) {
-  React.render(photostream({pics, es: bus}), document.getElementsByTagName('photostream')[0])
+let incPicsStream = Most.create(function(add, end, error) {
+  Most.fromEvent('load', emitter)
+    .startWith({since: ''})
+    .skipRepeatsWith(({since: since1}, {since: since2})=> since1 && since2 >= since1)
+    .flatMap(({since})=>
+      Most.fromPromise(
+        fetchTransit(`/pics/${folder}?from=${since}`)))
+    .forEach(add)
 })
 
-loadBus.connect()
-bus.onNext({action: 'load', since: ''})
+let picsStream = incPicsStream
+  .scan((pics, loadedPics)=> pics.concat(loadedPics), [])
+  .skip(1) // skip initial empty pictures event
 
+// RENDER STREAM
+picsStream.observe(function(pics) {
+  React.render(photostream({pics, emitter}), document.getElementsByTagName('photostream')[0])
+})
 
-bus.filter(({action})=> action == 'open-gallery').withLatestFrom(picsBus, (opts, pics)=> merge(opts, {pics}))
-  .forEach(function({pics, pic, from, index}) {
+Most.combine((pics, opts)=> merge(opts, {pics}), picsStream, Most.fromEvent('gallery.open', emitter))
+  .sampleWith(Most.fromEvent('gallery.open', emitter))
+  .observe(function({pics, pic, from, index}) {
     let gallery = new PhotoSwipe(document.getElementsByClassName('pswp')[0], PhotoSwipeUI, pics, {
       barsSize: {top: 0, bottom: 0},
       index: findIndex(pics, {fileName: pic.fileName}),
@@ -61,17 +67,13 @@ bus.filter(({action})=> action == 'open-gallery').withLatestFrom(picsBus, (opts,
       getThumbBoundsFn: ()=> from
     })
 
-    let updateSubscription = loadBus.forEach(function(loadedPics) {
+    incPicsStream.takeUntil(fromGalleryEvent(gallery, 'close').take(1)).observe(function(loadedPics) {
       Array.prototype.push.apply(gallery.items, loadedPics)
       gallery.ui.update()
     })
 
-    gallery.listen('close', function() {
-      updateSubscription.dispose()
-    })
-
     gallery.listen('gettingData', function(index, pic) {
-      if (gallery.getCurrentIndex()+20 > gallery.items.length) bus.onNext({action: 'load', since: gallery.items[gallery.items.length-1].date.valueOf()})
+      if (gallery.getCurrentIndex()+20 > gallery.items.length) emitter.emit('load', {since: gallery.items[gallery.items.length-1].date.valueOf()})
 
       let viewSize = max(gallery.viewportSize.x, gallery.viewportSize.y)
 

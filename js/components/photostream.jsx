@@ -27,9 +27,8 @@ class DateCard extends React.Component {
 class PicCard extends React.Component {
   openGallery(pic) {
     let $card = $(React.findDOMNode(this))
-    this.props.es.onNext({
-      action: 'open-gallery',
-      pic: pic,
+    this.props.emitter.emit('gallery.open', {
+      pic,
       from: {x: $card.offset().left, y: $card.offset().top, w: $card.width()}
     })
   }
@@ -44,7 +43,7 @@ class PicCard extends React.Component {
     let pic = this.props.pic
 
     return (
-      <li className={['card', this.props.className].join(' ')} key={pic.fileName} onClick={this.openGallery.bind(this, pic)}>
+      <li className={['card', this.props.className].join(' ')} onClick={this.openGallery.bind(this, pic)}>
         <WaypointImg className="foreground" src={pic.url({resize: pic.starred? [600, 600] : [300, 300], sharpen: []})} />
         <img src="/static/1x1.gif" className="background"/>
       </li>
@@ -69,15 +68,15 @@ export default class Photostream extends React.Component {
 
     let cards = []
     let lastDate = reduce(this.props.pics, (currDate, pic, i)=> {
-      if (i % 5 == 0) pic.starred = true
+      if (i % 5 == 0 && i != 0) pic.starred = true
 
       if (!pic.date.isSame(currDate, 'day')) cards.push(<DateCard date={pic.date} />)
 
-      cards.push(<PicCard pic={pic} es={this.props.es} className={pic.starred? x2class() : ''} />)
+      cards.push(<PicCard pic={pic} key={pic.fileName} emitter={this.props.emitter} className={pic.starred? x2class() : ''} />)
       return pic.date
-    })
+    }, '')
 
-    cards.push(<More es={this.props.es} since={lastDate? lastDate.valueOf() : ''} />)
+    cards.push(<More emitter={this.props.emitter} since={lastDate? lastDate.valueOf() : ''} />)
 
     return <ul className="cards">{ cards }</ul>
   }
