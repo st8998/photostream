@@ -79,8 +79,13 @@ Most.combine((pics, opts)=> merge(opts, {pics}), picsStream, Most.fromEvent('gal
 
       let size = find(Pic.sizes, (size)=> size >= viewSize) || Pic.sizes[Pic.sizes.length - 1]
 
-      pic.src = pic.url({resize: pic.width > pic.height ? [size, null] : [null, size]});
-      [pic.w, pic.h] = pic.width > pic.height ? [size, size * pic.height / pic.width] : [size * pic.width / pic.height, size]
+      if (size == 'max') {
+        pic.src = pic.url();
+        [pic.w, pic.h] = [pic.width, pic.height]
+      } else {
+        pic.src = pic.url({resize: pic.width > pic.height ? [size, null] : [null, size]});
+        [pic.w, pic.h] = pic.width > pic.height ? [size, size * pic.height / pic.width] : [size * pic.width / pic.height, size]
+      }
     })
 
     gallery.init()

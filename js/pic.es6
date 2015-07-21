@@ -58,6 +58,6 @@ export default class Pic {
   }
 }
 
-Pic.sizes = [640, 1280]
+Pic.sizes = [640, 1280, 'max']
 
 Pic.rootDir = config.pic.rootDir
